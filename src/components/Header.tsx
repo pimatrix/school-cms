@@ -47,7 +47,6 @@ export default function Header({
     (item) => item.slug === 'home' || pageVisible(settings, item.slug)
   );
   const schoolName = pick(lang, settings.school_name, settings.school_name_hi);
-  const tagline = pick(lang, settings.tagline, settings.tagline_hi);
 
   function setLang(next: Lang) {
     if (next === lang) return;
@@ -131,44 +130,14 @@ export default function Header({
           </div>
         </div>
 
-        {/* Masthead — full name, scrolls away on mobile */}
-        <div className="bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3 sm:gap-4">
-            <Link href="/" className="flex items-center gap-3 sm:gap-4 min-w-0">
-              {logoMark('w-10 h-10 sm:w-14 sm:h-14', 'text-lg sm:text-2xl')}
-              <div className="min-w-0">
-                <p className="font-display font-extrabold text-[17px] sm:text-2xl lg:text-[27px] leading-snug text-navy-900">
-                  {schoolName}
-                </p>
-                <p className="text-[11px] sm:text-sm text-slate-500 font-medium leading-snug">
-                  {tagline}
-                </p>
-              </div>
-            </Link>
-
-            {/* Desktop-only controls — the menu button and language
-                toggle live in the slim sticky bar on mobile, kept
-                separate from the school-name block. */}
-            <div className="ml-auto hidden lg:flex items-center gap-2.5 shrink-0">
-              {langToggle}
-              {pageVisible(settings, 'admissions') && (
-                <Link
-                  href="/admissions"
-                  className="inline-block rounded-full bg-saffron hover:bg-saffron-light text-navy-950 font-bold text-sm px-5 py-2.5 shadow-soft transition-all hover:-translate-y-0.5"
-                >
-                  {t(lang, 'admissionsOpen')}
-                </Link>
-              )}
-            </div>
-          </div>
-        </div>
       </header>
 
-      {/* Slim sticky bar — the only part that stays on screen while
-          scrolling. On mobile it carries just the logo, the school
-          name, the language toggle and the menu icon, all in one
-          thin strip, separate from the big masthead above. On
-          desktop it carries the main navigation. */}
+      {/* Slim sticky bar — the site's single header bar (the big
+          masthead was removed 2026-11-07 at the owner's request: the
+          school name showed twice at the top). On mobile it carries
+          the logo, the school name, the language toggle and the menu
+          icon in one thin strip. On desktop it carries the main
+          navigation plus the language toggle and admissions button. */}
       <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-soft border-t border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-2">
           {/* Mobile brand */}
@@ -205,6 +174,20 @@ export default function Header({
               {t(lang, 'adminLogin')}
             </Link>
           </nav>
+
+          {/* Desktop controls — the language toggle and admissions
+              button that used to sit in the removed masthead. */}
+          <div className="hidden lg:flex items-center gap-2.5 shrink-0 py-1.5">
+            {langToggle}
+            {pageVisible(settings, 'admissions') && (
+              <Link
+                href="/admissions"
+                className="inline-block rounded-full bg-saffron hover:bg-saffron-light text-navy-950 font-bold text-sm px-5 py-2.5 shadow-soft transition-all hover:-translate-y-0.5"
+              >
+                {t(lang, 'admissionsOpen')}
+              </Link>
+            )}
+          </div>
 
           {/* Mobile controls — separate from the name block */}
           <div className="ml-auto flex items-center gap-2 py-1.5 shrink-0 lg:hidden">
