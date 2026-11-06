@@ -41,7 +41,13 @@ export async function getSettings(): Promise<SiteSettings> {
 }
 
 export async function getPageContent(slug: string): Promise<PageContent> {
-  const fallback = FALLBACK_PAGES[slug] || { slug, title: '', body: '' };
+  const fallback = FALLBACK_PAGES[slug] || {
+    slug,
+    title: '',
+    title_hi: '',
+    body: '',
+    body_hi: '',
+  };
   try {
     const supabase = getPublicClient();
     const { data, error } = await supabase
@@ -134,7 +140,12 @@ export async function getGallery(limit?: number): Promise<GalleryImage[]> {
     if (limit) query = query.limit(limit);
     const { data, error } = await query;
     if (error || !data || data.length === 0) return FALLBACK_GALLERY;
-    return data as GalleryImage[];
+    // Rows created before migration 002 may lack media_type — default to image.
+    return (data as GalleryImage[]).map((g) => ({
+      ...g,
+      media_type: g.media_type === 'video' ? 'video' : 'image',
+      caption_hi: g.caption_hi || '',
+    }));
   } catch {
     return FALLBACK_GALLERY;
   }
@@ -235,9 +246,9 @@ export function externalHref(url: string): string {
   return `https://${u}`;
 }
 
-export function formatDate(iso: string): string {
+export function formatDate(iso: string, lang: 'en' | 'hi' = 'en'): string {
   try {
-    return new Date(iso).toLocaleDateString('en-IN', {
+    return new Date(iso).toLocaleDateString(lang === 'hi' ? 'hi-IN' : 'en-IN', {
       day: 'numeric',
       month: 'short',
       year: 'numeric',
@@ -245,4 +256,26 @@ export function formatDate(iso: string): string {
   } catch {
     return iso;
   }
+}
+
+// ---- Visibility toggles (migration 002) --------------------------------
+// Maps a public page slug to its show_page_* flag on site_settings.
+const PAGE_FLAGS: Record<string, keyof SiteSettings> = {
+  about: 'show_page_about',
+  academics: 'show_page_academics',
+  facilities: 'show_page_facilities',
+  gallery: 'show_page_gallery',
+  news: 'show_page_news',
+  events: 'show_page_events',
+  admissions: 'show_page_admissions',
+  faculty: 'show_page_faculty',
+  contact: 'show_page_contact',
+};
+
+export function pageVisible(settings: SiteSettings, slug: string): boolean {
+  const key = PAGE_FLAGS[slug];
+  if (!key) return true;
+  // Anything other than an explicit false means visible (rows saved before
+  // migration 002 simply have no flag yet).
+  return settings[key] !== false;
 }

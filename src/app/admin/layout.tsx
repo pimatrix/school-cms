@@ -6,17 +6,18 @@ import { useEffect, useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
 
 const MENU = [
-  { href: '/admin', label: 'Dashboard' },
-  { href: '/admin/settings', label: 'Site Settings' },
-  { href: '/admin/hero', label: 'Hero Slides' },
-  { href: '/admin/notices', label: 'Notices' },
-  { href: '/admin/news', label: 'News' },
-  { href: '/admin/events', label: 'Events' },
-  { href: '/admin/gallery', label: 'Gallery' },
-  { href: '/admin/teachers', label: 'Teachers' },
-  { href: '/admin/facilities', label: 'Facilities' },
-  { href: '/admin/pages', label: 'Page Content' },
-  { href: '/admin/enquiries', label: 'Enquiries' },
+  { href: '/admin', label: 'Dashboard', icon: '▦' },
+  { href: '/admin/settings', label: 'Site Settings', icon: '⚙' },
+  { href: '/admin/hero', label: 'Hero Slides', icon: '🖼' },
+  { href: '/admin/notices', label: 'Notices', icon: '📢' },
+  { href: '/admin/news', label: 'News', icon: '📰' },
+  { href: '/admin/events', label: 'Events', icon: '📅' },
+  { href: '/admin/gallery', label: 'Gallery', icon: '🎞' },
+  { href: '/admin/teachers', label: 'Teachers', icon: '👩‍🏫' },
+  { href: '/admin/facilities', label: 'Facilities', icon: '🏫' },
+  { href: '/admin/pages', label: 'Page Content', icon: '📄' },
+  { href: '/admin/enquiries', label: 'Enquiries', icon: '✉' },
+  { href: '/admin/manual', label: 'Manual', icon: '📘' },
 ];
 
 export default function AdminLayout({
@@ -27,81 +28,111 @@ export default function AdminLayout({
   const pathname = usePathname();
   const router = useRouter();
   const [email, setEmail] = useState('');
+  const [ready, setReady] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const isLogin = pathname === '/admin/login';
 
   useEffect(() => {
-    if (isLogin) return;
+    if (pathname === '/admin/login') {
+      setReady(true);
+      return;
+    }
     getBrowserClient()
       .auth.getUser()
-      .then(({ data }) => setEmail(data.user?.email || ''));
-  }, [isLogin]);
+      .then(({ data }) => {
+        if (!data.user) router.replace('/admin/login');
+        else {
+          setEmail(data.user.email || '');
+          setReady(true);
+        }
+      });
+  }, [pathname, router]);
 
   async function signOut() {
     await getBrowserClient().auth.signOut();
-    router.push('/admin/login');
-    router.refresh();
+    router.replace('/admin/login');
   }
 
-  if (isLogin) {
-    return <div className="min-h-screen bg-pine-deep">{children}</div>;
+  if (pathname === '/admin/login') {
+    return <div className="min-h-screen bg-navy-950 font-body">{children}</div>;
   }
 
   return (
-    <div className="min-h-screen bg-paper flex flex-col lg:flex-row">
-      {/* Sidebar (desktop) / Topbar (mobile) */}
-      <aside className="lg:w-64 shrink-0 bg-pine-deep text-paper lg:min-h-screen">
-        <div className="p-4 flex items-center justify-between lg:block">
-          <div>
-            <p className="font-display font-black text-lg leading-tight">
-              School CMS
-            </p>
-            <p className="text-paper/60 text-xs mt-0.5 truncate max-w-[200px]">
-              {email || 'Admin Panel'}
-            </p>
-          </div>
-          <button
-            className="lg:hidden border border-paper/40 px-3 py-1.5 font-bold text-sm"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? '✕' : '☰'}
-          </button>
-        </div>
-        <nav
-          className={`${menuOpen ? 'block' : 'hidden'} lg:block px-3 pb-4 space-y-0.5`}
+    <div className="min-h-screen bg-slate-100 font-body text-slate-800 flex flex-col lg:flex-row">
+      {/* Mobile top bar */}
+      <div className="lg:hidden bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
+        <span className="font-display font-bold text-navy-900">School CMS</span>
+        <button
+          onClick={() => setMenuOpen((o) => !o)}
+          className="rounded-lg border border-slate-300 px-3 py-1.5 text-sm font-semibold"
+          aria-label="Toggle menu"
         >
-          {MENU.map((m) => (
-            <Link
-              key={m.href}
-              href={m.href}
-              onClick={() => setMenuOpen(false)}
-              className={`block px-3 py-2 text-[15px] font-semibold transition-colors ${
-                pathname === m.href
-                  ? 'bg-marigold text-ink'
-                  : 'text-paper/85 hover:bg-paper/10'
-              }`}
-            >
-              {m.label}
-            </Link>
-          ))}
-          <div className="pt-3 mt-3 border-t border-paper/20 space-y-0.5">
+          {menuOpen ? 'Close' : 'Menu'}
+        </button>
+      </div>
+
+      {/* Sidebar */}
+      <aside
+        className={`bg-white border-r border-slate-200 lg:w-64 shrink-0 lg:min-h-screen lg:sticky lg:top-0 flex-col ${
+          menuOpen ? 'flex' : 'hidden'
+        } lg:flex`}
+      >
+        <div className="px-5 py-5 border-b border-slate-100 hidden lg:block">
+          <p className="font-display font-extrabold text-lg text-navy-900 leading-tight">
+            School CMS
+          </p>
+          <p className="text-xs text-slate-400 mt-0.5">Admin Panel</p>
+        </div>
+        <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+          {MENU.map((m) => {
+            const active =
+              m.href === '/admin'
+                ? pathname === '/admin'
+                : pathname.startsWith(m.href);
+            return (
+              <Link
+                key={m.href}
+                href={m.href}
+                onClick={() => setMenuOpen(false)}
+                className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-[15px] font-medium transition-colors ${
+                  active
+                    ? 'bg-navy-700 text-white shadow-soft'
+                    : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900'
+                }`}
+              >
+                <span className="w-5 text-center" aria-hidden>
+                  {m.icon}
+                </span>
+                {m.label}
+              </Link>
+            );
+          })}
+        </nav>
+        <div className="px-4 py-4 border-t border-slate-100">
+          <p className="text-xs text-slate-400 truncate mb-2.5">
+            Signed in as {email || '…'}
+          </p>
+          <div className="flex gap-2">
             <Link
               href="/"
-              className="block px-3 py-2 text-[15px] font-semibold text-paper/85 hover:bg-paper/10"
+              target="_blank"
+              className="flex-1 text-center rounded-lg border border-slate-300 px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
             >
               View Website
             </Link>
             <button
               onClick={signOut}
-              className="block w-full text-left px-3 py-2 text-[15px] font-semibold text-marigold hover:bg-paper/10"
+              className="flex-1 rounded-lg bg-navy-950 px-3 py-2 text-sm font-semibold text-white hover:bg-navy-900"
             >
               Sign Out
             </button>
           </div>
-        </nav>
+        </div>
       </aside>
 
-      <main className="flex-1 min-w-0 p-4 sm:p-8 max-w-5xl">{children}</main>
+      {/* Content */}
+      <main className="flex-1 min-w-0 px-4 py-6 sm:px-6 lg:px-8 lg:py-8 max-w-6xl w-full mx-auto">
+        {ready ? children : <p className="text-slate-400">Checking sign-in…</p>}
+      </main>
     </div>
   );
 }

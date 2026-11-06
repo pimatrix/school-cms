@@ -1,15 +1,28 @@
 import PageShell from '@/components/PageShell';
-import { getPageContent } from '@/lib/data';
+import PageUnavailable from '@/components/PageUnavailable';
+import { getPageContent, getSettings, pageVisible } from '@/lib/data';
+import { pick, t } from '@/lib/i18n';
+import { getLang } from '@/lib/lang';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AcademicsPage() {
-  const page = await getPageContent('academics');
+  const lang = getLang();
+  const [page, settings] = await Promise.all([
+    getPageContent('academics'),
+    getSettings(),
+  ]);
+  if (!pageVisible(settings, 'academics')) return <PageUnavailable lang={lang} />;
+
   return (
-    <PageShell kicker="Academics" title={page.title}>
+    <PageShell
+      kicker={t(lang, 'navAcademics')}
+      title={pick(lang, page.title, page.title_hi)}
+      lang={lang}
+    >
       <div
-        className="cms-body text-[17px] text-ink/85 max-w-4xl"
-        dangerouslySetInnerHTML={{ __html: page.body }}
+        className="cms-body text-[17px] text-slate-600 max-w-4xl"
+        dangerouslySetInnerHTML={{ __html: pick(lang, page.body, page.body_hi) }}
       />
     </PageShell>
   );

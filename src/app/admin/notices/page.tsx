@@ -10,11 +10,11 @@ export default function AdminNoticesPage() {
       description="Notices appear on the notice board and in the scrolling ticker at the top of every page. Pinned notices stay at the top."
       defaults={{ is_active: true, is_pinned: false }}
       fields={[
-        { key: 'title', label: 'Notice Title', type: 'text' },
+        { key: 'title', label: 'Notice Title', type: 'text', hindiKey: 'title_hi', hindiLabel: 'Notice Title (Hindi)' },
         { key: 'link_url', label: 'Attachment / Link URL (optional)', type: 'url', placeholder: 'https://…' },
         { key: 'is_pinned', label: 'Pin to top', type: 'checkbox' },
         { key: 'is_active', label: 'Show on website (Active)', type: 'checkbox' },
-        { key: 'body', label: 'Details (optional)', type: 'textarea', rows: 4 },
+        { key: 'body', label: 'Details (optional)', type: 'textarea', rows: 4, hindiKey: 'body_hi', hindiLabel: 'Details (Hindi)' },
       ]}
       listLabel={(r) => String(r.title || 'Untitled')}
       listSub={(r) =>

@@ -12,9 +12,9 @@ export default function AdminTeachersPage() {
       defaults={{ is_active: true, sort_order: 0 }}
       fields={[
         { key: 'name', label: 'Name', type: 'text' },
-        { key: 'role', label: 'Role', type: 'text', placeholder: 'Principal / PGT Hindi / TGT Maths' },
-        { key: 'subject', label: 'Subject', type: 'text' },
-        { key: 'qualification', label: 'Qualification', type: 'text', placeholder: 'M.A., B.Ed.' },
+        { key: 'role', label: 'Role', type: 'text', placeholder: 'Principal / PGT Hindi / TGT Maths', hindiKey: 'role_hi', hindiLabel: 'Role (Hindi)' },
+        { key: 'subject', label: 'Subject', type: 'text', hindiKey: 'subject_hi', hindiLabel: 'Subject (Hindi)' },
+        { key: 'qualification', label: 'Qualification', type: 'text', placeholder: 'M.A., B.Ed.', hindiKey: 'qualification_hi', hindiLabel: 'Qualification (Hindi)' },
         { key: 'email', label: 'Email (optional)', type: 'text' },
         { key: 'sort_order', label: 'Order (Principal first)', type: 'number' },
         { key: 'is_active', label: 'Show on website (Active)', type: 'checkbox' },

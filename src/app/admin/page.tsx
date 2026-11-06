@@ -36,10 +36,10 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <h1 className="font-display font-black text-3xl sm:text-4xl text-pine-deep">
+      <h1 className="font-display font-bold text-[28px] text-navy-900">
         Dashboard
       </h1>
-      <p className="text-ink/65 mt-2 max-w-2xl leading-relaxed">
+      <p className="text-slate-500 mt-2 max-w-2xl leading-relaxed">
         The whole website is managed from here. Anything you add or change is
         published on the live site immediately — no code changes needed.
       </p>
@@ -47,7 +47,7 @@ export default function AdminDashboard() {
       {unread !== null && unread > 0 && (
         <Link
           href="/admin/enquiries"
-          className="block mt-5 bg-marigold border-2 border-ink shadow-card px-5 py-3.5 font-bold"
+          className="block mt-5 bg-saffron rounded-xl shadow-card px-5 py-3.5 font-semibold text-navy-950"
         >
           ✉️ You have {unread} unread {unread === 1 ? 'enquiry' : 'enquiries'} — click to view →
         </Link>
@@ -58,7 +58,7 @@ export default function AdminDashboard() {
           <Link
             key={c.table}
             href={c.href}
-            className="bg-white border-2 border-ink shadow-card p-5 hover:-translate-y-0.5 transition-transform"
+            className="bg-white rounded-xl border border-slate-200 shadow-card p-5 hover:-translate-y-0.5 hover:shadow-lift transition"
           >
             <p className="text-3xl">{c.icon}</p>
             <p className="font-display font-black text-3xl mt-2">
@@ -66,16 +66,16 @@ export default function AdminDashboard() {
                 ? '…'
                 : counts[c.table]}
             </p>
-            <p className="font-semibold text-ink/60 text-sm">{c.label}</p>
+            <p className="font-medium text-slate-400 text-sm">{c.label}</p>
           </Link>
         ))}
       </div>
 
-      <div className="mt-8 bg-pine-deep text-paper p-6 border-2 border-ink">
-        <h2 className="font-display font-bold text-xl text-marigold">
+      <div className="mt-8 bg-navy-900 text-white p-6 rounded-xl shadow-card">
+        <h2 className="font-display font-bold text-xl text-saffron-light">
           Getting started
         </h2>
-        <ol className="list-decimal pl-5 mt-3 space-y-1.5 text-paper/85 text-[15px]">
+        <ol className="list-decimal pl-5 mt-3 space-y-1.5 text-white/85 text-[15px]">
           <li>
             In <strong>Site Settings</strong>, check the school name, logo,
             phone, email and map.
@@ -87,6 +87,11 @@ export default function AdminDashboard() {
           <li>
             Day to day: add <strong>Notices</strong>, upload{' '}
             <strong>Gallery</strong> photos and read <strong>Enquiries</strong>.
+          </li>
+          <li>
+            New here? Read the <strong>Manual</strong> (in the menu) — every
+            section is explained in simple language, including the Hindi
+            translation tools.
           </li>
         </ol>
       </div>

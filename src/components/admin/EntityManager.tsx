@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
+import { translateToHindi } from '@/lib/translate-client';
 import ImageUpload from './ImageUpload';
 
 export type FieldType =
@@ -11,7 +12,8 @@ export type FieldType =
   | 'number'
   | 'checkbox'
   | 'image'
-  | 'url';
+  | 'url'
+  | 'select';
 
 export interface FieldConfig {
   key: string;
@@ -19,6 +21,15 @@ export interface FieldConfig {
   type: FieldType;
   placeholder?: string;
   rows?: number;
+  options?: string[];
+  /**
+   * Name of the Hindi counterpart column (e.g. 'title_hi'). When set, the
+   * form shows a Hindi input next to this field with an "Auto-translate"
+   * button. The Hindi text is a draft — the admin can always edit it by
+   * hand before saving.
+   */
+  hindiKey?: string;
+  hindiLabel?: string;
 }
 
 interface Props {
@@ -32,8 +43,8 @@ interface Props {
   defaults?: Record<string, unknown>;
 }
 
-const inputCls =
-  'w-full border-2 border-ink/30 bg-white px-3 py-2 text-[15px] focus:outline-none focus:border-pine';
+export const adminInputCls =
+  'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-[15px] text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-navy-600/40 focus:border-navy-600 transition';
 
 export default function EntityManager({
   table,
@@ -50,6 +61,7 @@ export default function EntityManager({
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
+  const [translating, setTranslating] = useState<string>('');
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -72,6 +84,7 @@ export default function EntityManager({
       if (init[f.key] === undefined) {
         init[f.key] = f.type === 'checkbox' ? false : f.type === 'number' ? 0 : '';
       }
+      if (f.hindiKey && init[f.hindiKey] === undefined) init[f.hindiKey] = '';
     });
     setForm(init);
     setMsg('');
@@ -94,6 +107,7 @@ export default function EntityManager({
       let v = form[f.key];
       if (f.type === 'number') v = Number(v) || 0;
       payload[f.key] = v;
+      if (f.hindiKey) payload[f.hindiKey] = form[f.hindiKey] ?? '';
     });
 
     const { error } = form.id
@@ -126,70 +140,156 @@ export default function EntityManager({
     load();
   }
 
+  async function autoTranslate(f: FieldConfig) {
+    if (!form || !f.hindiKey) return;
+    const source = String(form[f.key] || '').trim();
+    if (!source) {
+      setMsg('Fill in the English text first, then use Auto-translate.');
+      return;
+    }
+    setTranslating(f.hindiKey);
+    try {
+      const hindi = await translateToHindi(source);
+      setForm({ ...form, [f.hindiKey]: hindi });
+      setMsg('Hindi draft added — please check and edit it if needed, then Save.');
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : 'Auto-translate failed.');
+    } finally {
+      setTranslating('');
+    }
+  }
+
+  function renderHindiPair(f: FieldConfig) {
+    if (!form || !f.hindiKey) return null;
+    const hiKey = f.hindiKey;
+    const busy = translating === hiKey;
+    return (
+      <div className="rounded-lg bg-navy-50/70 border border-navy-100 px-3.5 py-3 mt-1">
+        <div className="flex items-center justify-between gap-3 mb-1.5">
+          <label className="block text-sm font-semibold text-slate-700">
+            {f.hindiLabel || `${f.label} (Hindi)`}
+          </label>
+          <button
+            type="button"
+            disabled={busy}
+            onClick={() => autoTranslate(f)}
+            className="shrink-0 rounded-md bg-navy-700 text-white text-xs font-semibold px-3 py-1.5 hover:bg-navy-800 disabled:opacity-60 transition-colors"
+          >
+            {busy ? 'Translating…' : 'Auto-translate from English'}
+          </button>
+        </div>
+        {f.type === 'textarea' ? (
+          <textarea
+            rows={Math.max(2, (f.rows || 4) - 1)}
+            value={String(form[hiKey] || '')}
+            placeholder="Hindi text (optional — English is shown if left blank)"
+            onChange={(e) => setForm({ ...form, [hiKey]: e.target.value })}
+            className={adminInputCls}
+          />
+        ) : (
+          <input
+            value={String(form[hiKey] || '')}
+            placeholder="Hindi text (optional — English is shown if left blank)"
+            onChange={(e) => setForm({ ...form, [hiKey]: e.target.value })}
+            className={adminInputCls}
+          />
+        )}
+      </div>
+    );
+  }
+
   function renderField(f: FieldConfig) {
     if (!form) return null;
     const value = form[f.key];
     if (f.type === 'checkbox') {
       return (
-        <label key={f.key} className="flex items-center gap-2.5 font-semibold text-[15px] py-2">
-          <input
-            type="checkbox"
-            checked={Boolean(value)}
-            onChange={(e) => setForm({ ...form, [f.key]: e.target.checked })}
-            className="w-5 h-5 accent-emerald-700"
-          />
-          {f.label}
-        </label>
+        <div key={f.key}>
+          <label className="flex items-center gap-2.5 font-semibold text-[15px] py-2 text-slate-700 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={Boolean(value)}
+              onChange={(e) => setForm({ ...form, [f.key]: e.target.checked })}
+              className="w-5 h-5 accent-[#173F70]"
+            />
+            {f.label}
+          </label>
+          {renderHindiPair(f)}
+        </div>
       );
     }
     if (f.type === 'image') {
       return (
-        <ImageUpload
-          key={f.key}
-          label={f.label}
-          value={String(value || '')}
-          onChange={(url) => setForm({ ...form, [f.key]: url })}
-        />
+        <div key={f.key}>
+          <ImageUpload
+            label={f.label}
+            value={String(value || '')}
+            onChange={(url) => setForm({ ...form, [f.key]: url })}
+          />
+          {renderHindiPair(f)}
+        </div>
+      );
+    }
+    if (f.type === 'select') {
+      return (
+        <div key={f.key}>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">{f.label}</label>
+          <select
+            value={String(value || '')}
+            onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
+            className={adminInputCls}
+          >
+            {(f.options || []).map((o) => (
+              <option key={o} value={o}>
+                {o}
+              </option>
+            ))}
+          </select>
+          {renderHindiPair(f)}
+        </div>
       );
     }
     if (f.type === 'textarea') {
       return (
         <div key={f.key}>
-          <label className="block text-sm font-bold mb-1.5">{f.label}</label>
+          <label className="block text-sm font-semibold text-slate-700 mb-1.5">{f.label}</label>
           <textarea
             rows={f.rows || 4}
             value={String(value || '')}
             placeholder={f.placeholder}
             onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-            className={inputCls}
+            className={adminInputCls}
           />
+          {renderHindiPair(f)}
         </div>
       );
     }
     return (
       <div key={f.key}>
-        <label className="block text-sm font-bold mb-1.5">{f.label}</label>
+        <label className="block text-sm font-semibold text-slate-700 mb-1.5">{f.label}</label>
         <input
           type={f.type === 'date' ? 'date' : f.type === 'number' ? 'number' : 'text'}
           value={String(value ?? '')}
           placeholder={f.placeholder}
           onChange={(e) => setForm({ ...form, [f.key]: e.target.value })}
-          className={inputCls}
+          className={adminInputCls}
         />
+        {renderHindiPair(f)}
       </div>
     );
   }
+
+  const hasHindi = fields.some((f) => f.hindiKey);
 
   return (
     <div>
       <div className="flex flex-wrap items-start justify-between gap-3 mb-6">
         <div>
-          <h1 className="font-display font-black text-3xl text-pine-deep">{title}</h1>
-          {description && <p className="text-ink/65 mt-1">{description}</p>}
+          <h1 className="font-display font-bold text-[28px] text-navy-900">{title}</h1>
+          {description && <p className="text-slate-500 mt-1">{description}</p>}
         </div>
         <button
           onClick={startNew}
-          className="bg-marigold text-ink font-bold px-4 py-2.5 border-2 border-ink shadow-card"
+          className="rounded-lg bg-saffron hover:bg-saffron-light text-navy-950 font-semibold px-4 py-2.5 shadow-soft transition-colors"
         >
           + Add New
         </button>
@@ -198,11 +298,20 @@ export default function EntityManager({
       {form && (
         <form
           onSubmit={save}
-          className="bg-white border-2 border-ink shadow-card p-5 sm:p-6 mb-8 space-y-4"
+          className="bg-white rounded-xl border border-slate-200 shadow-card p-5 sm:p-6 mb-8 space-y-4"
         >
-          <h2 className="font-display font-bold text-xl">
+          <h2 className="font-display font-bold text-lg text-navy-900">
             {form.id ? 'Edit' : 'New'} — {title}
           </h2>
+          {hasHindi && (
+            <p className="text-sm text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3.5 py-2.5">
+              This form has Hindi versions of the text fields. Use{' '}
+              <strong>Auto-translate</strong> to generate a Hindi draft from the
+              English text, then edit it by hand if needed — your edited Hindi
+              is what visitors see when they switch the website to Hindi.
+              Leaving a Hindi field blank shows the English text instead.
+            </p>
+          )}
           <div className="grid sm:grid-cols-2 gap-4">
             {fields
               .filter((f) => f.type !== 'textarea' && f.type !== 'image')
@@ -213,27 +322,27 @@ export default function EntityManager({
             <button
               type="submit"
               disabled={saving}
-              className="bg-pine text-paper font-bold px-6 py-2.5 border-2 border-ink disabled:opacity-60"
+              className="rounded-lg bg-navy-700 hover:bg-navy-800 text-white font-semibold px-6 py-2.5 disabled:opacity-60 transition-colors"
             >
               {saving ? 'Saving…' : 'Save'}
             </button>
             <button
               type="button"
               onClick={() => setForm(null)}
-              className="font-bold px-4 py-2.5 border-2 border-ink/30"
+              className="rounded-lg font-semibold px-4 py-2.5 border border-slate-300 text-slate-600 hover:bg-slate-50 transition-colors"
             >
               Cancel
             </button>
-            {msg && <p className="font-semibold text-sm">{msg}</p>}
+            {msg && <p className="font-semibold text-sm text-slate-600">{msg}</p>}
           </div>
         </form>
       )}
-      {!form && msg && <p className="font-semibold mb-4">{msg}</p>}
+      {!form && msg && <p className="font-semibold mb-4 text-slate-600">{msg}</p>}
 
       {loading ? (
-        <p className="text-ink/60">Loading…</p>
+        <p className="text-slate-400">Loading…</p>
       ) : rows.length === 0 ? (
-        <div className="border-2 border-dashed border-ink/30 p-8 text-center text-ink/60">
+        <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center text-slate-500 bg-white/60">
           Nothing here yet. Use <strong>+ Add New</strong> to create the
           first item — it will appear on the website right away.
         </div>
@@ -242,20 +351,20 @@ export default function EntityManager({
           {rows.map((row) => (
             <li
               key={String(row.id)}
-              className="bg-white border-2 border-ink/15 px-4 py-3 flex items-center gap-3 hover:border-ink/40 transition-colors"
+              className="bg-white rounded-lg border border-slate-200 px-4 py-3 flex items-center gap-3 hover:border-navy-200 hover:shadow-soft transition"
             >
               <div className="min-w-0 flex-1">
-                <p className="font-bold truncate">{listLabel(row)}</p>
+                <p className="font-semibold text-slate-800 truncate">{listLabel(row)}</p>
                 {listSub && (
-                  <p className="text-sm text-ink/55 truncate">{listSub(row)}</p>
+                  <p className="text-sm text-slate-400 truncate">{listSub(row)}</p>
                 )}
               </div>
               {'is_active' in row && (
                 <span
-                  className={`text-xs font-bold px-2 py-1 ${
+                  className={`text-[11px] font-bold px-2 py-1 rounded-full ${
                     row.is_active
-                      ? 'bg-pine/10 text-pine'
-                      : 'bg-clay/10 text-clay'
+                      ? 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200'
+                      : 'bg-red-50 text-red-600 ring-1 ring-red-200'
                   }`}
                 >
                   {row.is_active ? 'LIVE' : 'HIDDEN'}
@@ -263,13 +372,13 @@ export default function EntityManager({
               )}
               <button
                 onClick={() => startEdit(row)}
-                className="font-bold text-sm text-pine px-2 py-1"
+                className="font-semibold text-sm text-navy-700 px-2 py-1 hover:underline"
               >
                 Edit
               </button>
               <button
                 onClick={() => remove(row)}
-                className="font-bold text-sm text-clay px-2 py-1"
+                className="font-semibold text-sm text-clay px-2 py-1 hover:underline"
               >
                 Delete
               </button>

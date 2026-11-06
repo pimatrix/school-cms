@@ -18,15 +18,15 @@ export default function SectionHeading({
       <div>
         <p
           className={`flex items-center gap-3 font-bold tracking-[0.24em] text-[11px] sm:text-xs uppercase mb-3 ${
-            dark ? 'text-marigold-light' : 'text-marigold-dark'
+            dark ? 'text-saffron-light' : 'text-saffron-dark'
           }`}
         >
-          <span className={`inline-block h-px w-8 ${dark ? 'bg-marigold-light' : 'bg-marigold'}`} />
+          <span className={`inline-block h-px w-8 ${dark ? 'bg-saffron-light' : 'bg-saffron'}`} />
           {kicker}
         </p>
         <h2
-          className={`font-display font-black text-3xl sm:text-[40px] leading-[1.1] ${
-            dark ? 'text-paper' : 'text-pine-deep'
+          className={`font-display font-extrabold text-3xl sm:text-[40px] leading-[1.1] ${
+            dark ? 'text-white' : 'text-navy-900'
           }`}
         >
           {title}
@@ -36,7 +36,7 @@ export default function SectionHeading({
         <Link
           href={linkHref}
           className={`hidden sm:inline-block shrink-0 font-bold text-sm link-flourish pb-1 ${
-            dark ? 'text-marigold-light' : 'text-pine'
+            dark ? 'text-saffron-light' : 'text-navy-700'
           }`}
         >
           {linkLabel} →

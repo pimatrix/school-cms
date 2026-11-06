@@ -1,42 +1,53 @@
 import Image from 'next/image';
 import PageShell from '@/components/PageShell';
-import { getFacilities } from '@/lib/data';
+import PageUnavailable from '@/components/PageUnavailable';
+import { getFacilities, getSettings, pageVisible } from '@/lib/data';
+import { pick, t } from '@/lib/i18n';
+import { getLang } from '@/lib/lang';
 
 export const dynamic = 'force-dynamic';
 
 export default async function FacilitiesPage() {
-  const facilities = await getFacilities();
+  const lang = getLang();
+  const [facilities, settings] = await Promise.all([
+    getFacilities(),
+    getSettings(),
+  ]);
+  if (!pageVisible(settings, 'facilities')) return <PageUnavailable lang={lang} />;
+
   return (
-    <PageShell kicker="On Campus" title="Facilities">
+    <PageShell kicker={t(lang, 'onCampus')} title={t(lang, 'facilitiesTitle')} lang={lang}>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {facilities.map((f) => (
           <article
             key={f.id}
-            className="rounded-2xl bg-white shadow-card ring-1 ring-ink/5 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
+            className="rounded-2xl bg-white shadow-card ring-1 ring-slate-900/5 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
           >
             {f.image_url ? (
               <Image
                 src={f.image_url}
-                alt={f.title}
+                alt={pick(lang, f.title, f.title_hi)}
                 width={800}
                 height={450}
                 className="w-full h-44 object-cover"
               />
             ) : (
-              <div className="w-full h-32 bg-gradient-to-br from-pine to-pine-dark flex items-center justify-center text-5xl">
+              <div className="w-full h-32 bg-gradient-to-br from-navy-600 to-navy-800 flex items-center justify-center text-5xl">
                 {f.icon}
               </div>
             )}
             <div className="p-6">
-              <h2 className="font-display font-bold text-xl text-pine-deep">
-                {f.title}
+              <h2 className="font-display font-bold text-xl text-navy-900">
+                {pick(lang, f.title, f.title_hi)}
               </h2>
-              <p className="text-ink/70 mt-2 leading-relaxed">{f.description}</p>
+              <p className="text-slate-500 mt-2 leading-relaxed">
+                {pick(lang, f.description, f.description_hi)}
+              </p>
             </div>
           </article>
         ))}
         {facilities.length === 0 && (
-          <p className="text-ink/60">Facilities will be listed here soon.</p>
+          <p className="text-slate-500">{t(lang, 'facilitiesSoon')}</p>
         )}
       </div>
     </PageShell>

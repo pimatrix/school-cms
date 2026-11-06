@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --paper: #faf6ec;
-  --ink: #17211c;
+  --surface: #f4f7fb;
+  --ink: #17233b;
 }
 
 html {
@@ -12,24 +12,24 @@ html {
 }
 
 body {
-  background-color: var(--paper);
+  background-color: var(--surface);
   color: var(--ink);
-  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', 'Public Sans', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: #e9a319;
-  color: #17211c;
+  background: #f59e0b;
+  color: #081c36;
 }
 
-/* Subtle paper-grain texture for hero / dark sections */
+/* Subtle dot texture for dark navy sections */
 .texture-dots {
-  background-image: radial-gradient(rgba(250, 246, 236, 0.14) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.13) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 .texture-dots-dark {
-  background-image: radial-gradient(rgba(23, 33, 28, 0.08) 1px, transparent 1px);
+  background-image: radial-gradient(rgba(13, 39, 72, 0.07) 1px, transparent 1px);
   background-size: 22px 22px;
 }
 

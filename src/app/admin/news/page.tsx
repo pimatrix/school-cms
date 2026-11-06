@@ -11,11 +11,11 @@ export default function AdminNewsPage() {
       orderBy="publish_date"
       defaults={{ is_active: true, publish_date: new Date().toISOString().slice(0, 10) }}
       fields={[
-        { key: 'title', label: 'News Title', type: 'text' },
+        { key: 'title', label: 'News Title', type: 'text', hindiKey: 'title_hi', hindiLabel: 'News Title (Hindi)' },
         { key: 'publish_date', label: 'Date', type: 'date' },
         { key: 'is_active', label: 'Show on website (Active)', type: 'checkbox' },
-        { key: 'excerpt', label: 'Short Summary (Excerpt)', type: 'textarea', rows: 2 },
-        { key: 'body', label: 'Full Story (Body)', type: 'textarea', rows: 6 },
+        { key: 'excerpt', label: 'Short Summary (Excerpt)', type: 'textarea', rows: 2, hindiKey: 'excerpt_hi', hindiLabel: 'Short Summary (Hindi)' },
+        { key: 'body', label: 'Full Story (Body)', type: 'textarea', rows: 6, hindiKey: 'body_hi', hindiLabel: 'Full Story (Hindi)' },
         { key: 'image_url', label: 'Photo', type: 'image' },
       ]}
       listLabel={(r) => String(r.title || 'Untitled')}

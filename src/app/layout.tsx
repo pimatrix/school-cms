@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { getLang } from '@/lib/lang';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -12,8 +13,9 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const lang = getLang();
   return (
-    <html lang="en">
+    <html lang={lang === 'hi' ? 'hi' : 'en'}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -22,7 +24,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,900&family=Public+Sans:wght@400;500;600;700;800&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
           rel="stylesheet"
         />
       </head>

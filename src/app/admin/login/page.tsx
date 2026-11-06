@@ -27,27 +27,27 @@ export default function AdminLoginPage() {
   }
 
   const inputCls =
-    'w-full border-2 border-ink bg-paper px-3.5 py-2.5 focus:outline-none focus:ring-2 focus:ring-marigold';
+    'w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-navy-600/40 focus:border-navy-600';
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 texture-dots">
       <form
         onSubmit={handleLogin}
-        className="bg-paper border-2 border-ink shadow-lift w-full max-w-md p-7 sm:p-9"
+        className="bg-white rounded-2xl shadow-lift w-full max-w-md p-7 sm:p-9"
       >
-        <p className="text-pine font-extrabold tracking-[0.22em] text-xs uppercase">
+        <p className="text-saffron-dark font-bold tracking-[0.22em] text-xs uppercase">
           Secure Area
         </p>
-        <h1 className="font-display font-black text-3xl text-pine-deep mt-2">
+        <h1 className="font-display font-extrabold text-3xl text-navy-900 mt-2">
           Admin Login
         </h1>
-        <p className="text-ink/65 text-sm mt-2">
+        <p className="text-slate-500 text-sm mt-2">
           For authorised school administrators only.
         </p>
 
         <div className="mt-6 space-y-4">
           <div>
-            <label className="block text-sm font-bold mb-1.5">Email</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Email</label>
             <input
               type="email"
               required
@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
             />
           </div>
           <div>
-            <label className="block text-sm font-bold mb-1.5">Password</label>
+            <label className="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
             <input
               type="password"
               required
@@ -79,11 +79,11 @@ export default function AdminLoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-6 w-full bg-pine text-paper font-bold py-3 border-2 border-ink shadow-card disabled:opacity-60"
+          className="mt-6 w-full bg-navy-700 hover:bg-navy-800 text-white font-semibold py-3 rounded-lg shadow-soft disabled:opacity-60 transition-colors"
         >
           {loading ? 'Checking…' : 'Login →'}
         </button>
-        <a href="/" className="block text-center text-sm font-semibold text-pine mt-4">
+        <a href="/" className="block text-center text-sm font-semibold text-navy-700 mt-4 hover:underline">
           ← Back to website
         </a>
       </form>

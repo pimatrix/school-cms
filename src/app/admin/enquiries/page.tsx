@@ -41,18 +41,18 @@ export default function AdminEnquiriesPage() {
 
   return (
     <div>
-      <h1 className="font-display font-black text-3xl text-pine-deep">
+      <h1 className="font-display font-bold text-[28px] text-navy-900">
         Enquiries Inbox
       </h1>
-      <p className="text-ink/65 mt-1 mb-6">
+      <p className="text-slate-500 mt-1 mb-6">
         Messages submitted through the website contact form. Only visible to
         signed-in administrators.
       </p>
 
       {loading ? (
-        <p className="text-ink/60">Loading…</p>
+        <p className="text-slate-400">Loading…</p>
       ) : items.length === 0 ? (
-        <div className="border-2 border-dashed border-ink/30 p-8 text-center text-ink/60">
+        <div className="rounded-xl border-2 border-dashed border-slate-300 p-8 text-center text-slate-500 bg-white/60">
           No enquiries yet.
         </div>
       ) : (
@@ -60,21 +60,21 @@ export default function AdminEnquiriesPage() {
           {items.map((item) => (
             <li
               key={item.id}
-              className={`bg-white border-2 p-5 ${
-                item.is_read ? 'border-ink/15' : 'border-marigold shadow-card'
+              className={`bg-white rounded-xl border p-5 ${
+                item.is_read ? 'border-slate-200' : 'border-saffron shadow-card'
               }`}
             >
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
-                  <p className="font-bold text-lg">
+                  <p className="font-semibold text-lg text-slate-800">
                     {item.name}
                     {!item.is_read && (
-                      <span className="ml-2 text-xs bg-marigold text-ink px-2 py-0.5 font-extrabold">
+                      <span className="ml-2 text-xs bg-saffron text-navy-950 px-2 py-0.5 rounded-full font-bold">
                         NEW
                       </span>
                     )}
                   </p>
-                  <p className="text-sm text-ink/60">
+                  <p className="text-sm text-slate-400">
                     ✉ {item.email}
                     {item.phone ? ` • ☎ ${item.phone}` : ''} •{' '}
                     {new Date(item.created_at).toLocaleString('en-IN')}
@@ -83,19 +83,19 @@ export default function AdminEnquiriesPage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => toggleRead(item)}
-                    className="text-sm font-bold text-pine border-2 border-pine/40 px-3 py-1.5"
+                    className="text-sm font-semibold text-navy-700 border border-slate-300 rounded-lg px-3 py-1.5 hover:bg-slate-50"
                   >
                     {item.is_read ? 'Mark Unread' : '✓ Mark Read'}
                   </button>
                   <button
                     onClick={() => remove(item)}
-                    className="text-sm font-bold text-clay border-2 border-clay/40 px-3 py-1.5"
+                    className="text-sm font-semibold text-clay border border-red-200 rounded-lg px-3 py-1.5 hover:bg-red-50"
                   >
                     Delete
                   </button>
                 </div>
               </div>
-              <p className="mt-3 text-ink/85 leading-relaxed whitespace-pre-wrap">
+              <p className="mt-3 text-slate-600 leading-relaxed whitespace-pre-wrap">
                 {item.message}
               </p>
             </li>

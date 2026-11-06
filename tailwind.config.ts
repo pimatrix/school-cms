@@ -1,35 +1,46 @@
 import type { Config } from 'tailwindcss';
 
+// Theme: clean modern academic — bright white surfaces, deep navy primary,
+// saffron/amber accent. (Legacy token names paper/cream/ink/clay are kept so
+// older markup keeps working, with values updated to the new palette.)
 const config: Config = {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        paper: '#FAF6EC',
-        cream: '#F3ECDB',
-        ink: '#17211C',
-        pine: {
-          light: '#17714F',
-          DEFAULT: '#0C5B40',
-          dark: '#073C2A',
-          deep: '#052A1E',
+        paper: '#FFFFFF',
+        cream: '#EEF3FA',
+        surface: '#F4F7FB',
+        ink: '#17233B',
+        navy: {
+          light: '#2E5A94',
+          DEFAULT: '#143A66',
+          dark: '#0E2C50',
+          deep: '#081F3C',
+          50: '#EEF3FA',
+          100: '#D9E4F2',
+          200: '#B3C9E4',
+          600: '#1D4E89',
+          700: '#173F70',
+          800: '#12325A',
+          900: '#0D2748',
+          950: '#081C36',
         },
-        marigold: {
-          light: '#F6C453',
-          DEFAULT: '#E9A319',
-          dark: '#C07F0A',
+        saffron: {
+          light: '#FFBE3C',
+          DEFAULT: '#F59E0B',
+          dark: '#B45309',
         },
-        clay: '#C4502B',
+        clay: '#DC2626',
       },
       fontFamily: {
-        display: ['Fraunces', 'Georgia', 'serif'],
-        body: ['"Public Sans"', 'system-ui', 'sans-serif'],
+        display: ['Archivo', '"Public Sans"', 'system-ui', 'sans-serif'],
+        body: ['Inter', '"Public Sans"', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
-        // Soft, premium elevation (replaces the old hard offset shadows)
-        card: '0 1px 2px rgba(23,33,28,0.05), 0 12px 32px -16px rgba(7,60,42,0.25)',
-        lift: '0 24px 48px -20px rgba(7,60,42,0.38)',
-        soft: '0 1px 3px rgba(23,33,28,0.07)',
+        card: '0 1px 2px rgba(13,39,72,0.05), 0 10px 30px -14px rgba(13,39,72,0.18)',
+        lift: '0 22px 44px -18px rgba(13,39,72,0.30)',
+        soft: '0 1px 3px rgba(13,39,72,0.07)',
       },
     },
   },
