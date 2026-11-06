@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #faf6ec;
+  --ink: #17211c;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: 'Public Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #e9a319;
+  color: #17211c;
+}
+
+/* Subtle paper-grain texture for hero / dark sections */
+.texture-dots {
+  background-image: radial-gradient(rgba(250, 246, 236, 0.14) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.texture-dots-dark {
+  background-image: radial-gradient(rgba(23, 33, 28, 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Notice ticker */
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: ticker-scroll 40s linear infinite;
+}
+.ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* Gentle reveal on load */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in {
+  animation: rise-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Editorial link underline */
+.link-flourish {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  background-position: left 100%;
+  transition: background-size 0.3s ease;
+}
+.link-flourish:hover {
+  background-size: 100% 2px;
+}
+
+/* Rich text from the CMS (page bodies) */
+.cms-body p { margin-bottom: 1rem; line-height: 1.8; }
+.cms-body ul { list-style: disc; padding-left: 1.4rem; margin-bottom: 1rem; }
+.cms-body li { margin-bottom: 0.35rem; line-height: 1.7; }
+.cms-body strong { font-weight: 700; }

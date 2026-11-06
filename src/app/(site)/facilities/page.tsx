@@ -1,0 +1,44 @@
+import Image from 'next/image';
+import PageShell from '@/components/PageShell';
+import { getFacilities } from '@/lib/data';
+
+export const dynamic = 'force-dynamic';
+
+export default async function FacilitiesPage() {
+  const facilities = await getFacilities();
+  return (
+    <PageShell kicker="On Campus" title="Facilities">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        {facilities.map((f) => (
+          <article
+            key={f.id}
+            className="bg-paper border-2 border-ink shadow-card overflow-hidden"
+          >
+            {f.image_url ? (
+              <Image
+                src={f.image_url}
+                alt={f.title}
+                width={800}
+                height={450}
+                className="w-full h-44 object-cover"
+              />
+            ) : (
+              <div className="w-full h-28 bg-pine flex items-center justify-center text-5xl">
+                {f.icon}
+              </div>
+            )}
+            <div className="p-5">
+              <h2 className="font-display font-bold text-xl">
+                {f.icon} {f.title}
+              </h2>
+              <p className="text-ink/70 mt-2 leading-relaxed">{f.description}</p>
+            </div>
+          </article>
+        ))}
+        {facilities.length === 0 && (
+          <p className="text-ink/60">Facilities will be listed here soon.</p>
+        )}
+      </div>
+    </PageShell>
+  );
+}
