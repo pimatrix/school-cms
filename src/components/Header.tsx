@@ -123,18 +123,18 @@ export default function Header({
                 alt={schoolName}
                 width={64}
                 height={64}
-                className="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0"
+                className="w-10 h-10 sm:w-14 sm:h-14 object-contain shrink-0"
               />
             ) : (
-              <div className="w-12 h-12 sm:w-14 sm:h-14 shrink-0 rounded-xl bg-navy-700 text-white font-display font-extrabold text-xl sm:text-2xl flex items-center justify-center">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 rounded-xl bg-navy-700 text-white font-display font-extrabold text-lg sm:text-2xl flex items-center justify-center">
                 {initials(settings.school_name)}
               </div>
             )}
             <div className="min-w-0">
-              <p className="font-display font-extrabold text-lg sm:text-2xl lg:text-[27px] leading-tight text-navy-900 truncate">
+              <p className="font-display font-extrabold text-[17px] sm:text-2xl lg:text-[27px] leading-snug text-navy-900">
                 {schoolName}
               </p>
-              <p className="text-xs sm:text-sm text-slate-500 font-medium truncate">
+              <p className="text-[11px] sm:text-sm text-slate-500 font-medium leading-snug">
                 {tagline}
               </p>
             </div>
@@ -152,16 +152,14 @@ export default function Header({
             )}
             <button
               onClick={() => setOpen(!open)}
-              className="lg:hidden inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-4 py-2 font-semibold text-sm"
+              className="lg:hidden inline-flex items-center justify-center rounded-full border border-slate-300 bg-white p-2.5"
               aria-label="Toggle menu"
               aria-expanded={open}
             >
               {open ? (
-                <X className="w-4 h-4" aria-hidden />
+                <X className="w-5 h-5" aria-hidden />
               ) : (
-                <>
-                  <MenuIcon className="w-4 h-4" aria-hidden /> {t(lang, 'menu')}
-                </>
+                <MenuIcon className="w-5 h-5" aria-hidden />
               )}
             </button>
           </div>
