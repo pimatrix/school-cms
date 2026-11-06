@@ -5,6 +5,13 @@ import PageUnavailable from '@/components/PageUnavailable';
 import { formatDate, getEvents, getSettings, pageVisible } from '@/lib/data';
 import { pick, t, type Lang } from '@/lib/i18n';
 import { getLang } from '@/lib/lang';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Events',
+  description: 'Upcoming events at Govt School of Excellence Bal Vinay Mandir, Indore.',
+};
+
 
 export const dynamic = 'force-dynamic';
 

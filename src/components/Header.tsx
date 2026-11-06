@@ -61,7 +61,7 @@ export default function Header({
 
   const langToggle = (
     <div
-      className="flex items-center rounded-full border border-slate-300 overflow-hidden text-[13px] font-bold"
+      className="flex items-center rounded-full border border-slate-300 overflow-hidden text-[13px] font-bold shrink-0"
       role="group"
       aria-label="Language / भाषा"
     >
@@ -92,82 +92,95 @@ export default function Header({
     </div>
   );
 
+  const logoMark = (sizeClass: string, textClass: string) =>
+    settings.logo_url ? (
+      <Image
+        src={settings.logo_url}
+        alt={schoolName}
+        width={64}
+        height={64}
+        className={`${sizeClass} object-contain shrink-0`}
+      />
+    ) : (
+      <div
+        className={`${sizeClass} shrink-0 rounded-xl bg-navy-700 text-white font-display font-extrabold ${textClass} flex items-center justify-center`}
+      >
+        {initials(settings.school_name)}
+      </div>
+    );
+
   return (
-    <header className="sticky top-0 z-40">
-      {/* Utility strip */}
-      <div className="bg-navy-950 text-white/85 text-xs sm:text-[13px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap gap-x-5 gap-y-0.5 items-center justify-end">
-          <div className="flex items-center gap-4">
-            {settings.phone && (
-              <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-1.5 hover:text-saffron-light transition-colors">
-                <Phone className="w-3.5 h-3.5" aria-hidden /> {settings.phone}
-              </a>
-            )}
-            {settings.email && (
-              <a href={`mailto:${settings.email}`} className="hidden sm:inline-flex items-center gap-1.5 hover:text-saffron-light transition-colors">
-                <Mail className="w-3.5 h-3.5" aria-hidden /> {settings.email}
-              </a>
-            )}
-            <span className="hidden md:inline text-white/55">{settings.board_name}</span>
+    <>
+      <header className="relative">
+        {/* Utility strip */}
+        <div className="bg-navy-950 text-white/85 text-xs sm:text-[13px]">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap gap-x-5 gap-y-0.5 items-center justify-end">
+            <div className="flex items-center gap-4">
+              {settings.phone && (
+                <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-1.5 hover:text-saffron-light transition-colors">
+                  <Phone className="w-3.5 h-3.5" aria-hidden /> {settings.phone}
+                </a>
+              )}
+              {settings.email && (
+                <a href={`mailto:${settings.email}`} className="hidden sm:inline-flex items-center gap-1.5 hover:text-saffron-light transition-colors">
+                  <Mail className="w-3.5 h-3.5" aria-hidden /> {settings.email}
+                </a>
+              )}
+              <span className="hidden md:inline text-white/55">{settings.board_name}</span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Masthead */}
-      <div className="bg-white/95 backdrop-blur-md shadow-soft">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3 sm:gap-4">
-          <Link href="/" className="flex items-center gap-3 sm:gap-4 min-w-0">
-            {settings.logo_url ? (
-              <Image
-                src={settings.logo_url}
-                alt={schoolName}
-                width={64}
-                height={64}
-                className="w-10 h-10 sm:w-14 sm:h-14 object-contain shrink-0"
-              />
-            ) : (
-              <div className="w-10 h-10 sm:w-14 sm:h-14 shrink-0 rounded-xl bg-navy-700 text-white font-display font-extrabold text-lg sm:text-2xl flex items-center justify-center">
-                {initials(settings.school_name)}
+        {/* Masthead — full name, scrolls away on mobile */}
+        <div className="bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex items-center gap-3 sm:gap-4">
+            <Link href="/" className="flex items-center gap-3 sm:gap-4 min-w-0">
+              {logoMark('w-10 h-10 sm:w-14 sm:h-14', 'text-lg sm:text-2xl')}
+              <div className="min-w-0">
+                <p className="font-display font-extrabold text-[17px] sm:text-2xl lg:text-[27px] leading-snug text-navy-900">
+                  {schoolName}
+                </p>
+                <p className="text-[11px] sm:text-sm text-slate-500 font-medium leading-snug">
+                  {tagline}
+                </p>
               </div>
-            )}
-            <div className="min-w-0">
-              <p className="font-display font-extrabold text-[17px] sm:text-2xl lg:text-[27px] leading-snug text-navy-900">
-                {schoolName}
-              </p>
-              <p className="text-[11px] sm:text-sm text-slate-500 font-medium leading-snug">
-                {tagline}
-              </p>
+            </Link>
+
+            {/* Desktop-only controls — the menu button and language
+                toggle live in the slim sticky bar on mobile, kept
+                separate from the school-name block. */}
+            <div className="ml-auto hidden lg:flex items-center gap-2.5 shrink-0">
+              {langToggle}
+              {pageVisible(settings, 'admissions') && (
+                <Link
+                  href="/admissions"
+                  className="inline-block rounded-full bg-saffron hover:bg-saffron-light text-navy-950 font-bold text-sm px-5 py-2.5 shadow-soft transition-all hover:-translate-y-0.5"
+                >
+                  {t(lang, 'admissionsOpen')}
+                </Link>
+              )}
             </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Slim sticky bar — the only part that stays on screen while
+          scrolling. On mobile it carries just the logo, the school
+          name, the language toggle and the menu icon, all in one
+          thin strip, separate from the big masthead above. On
+          desktop it carries the main navigation. */}
+      <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-md shadow-soft border-t border-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 flex items-center gap-2">
+          {/* Mobile brand */}
+          <Link href="/" className="flex items-center gap-2 min-w-0 flex-1 py-2 lg:hidden">
+            {logoMark('w-7 h-7 rounded-lg', 'text-[11px]')}
+            <span className="font-display font-bold text-[13px] leading-tight text-navy-900">
+              {schoolName}
+            </span>
           </Link>
 
-          <div className="ml-auto flex items-center gap-2.5 shrink-0">
-            {langToggle}
-            {pageVisible(settings, 'admissions') && (
-              <Link
-                href="/admissions"
-                className="hidden lg:inline-block rounded-full bg-saffron hover:bg-saffron-light text-navy-950 font-bold text-sm px-5 py-2.5 shadow-soft transition-all hover:-translate-y-0.5"
-              >
-                {t(lang, 'admissionsOpen')}
-              </Link>
-            )}
-            <button
-              onClick={() => setOpen(!open)}
-              className="lg:hidden inline-flex items-center justify-center rounded-full border border-slate-300 bg-white p-2.5"
-              aria-label="Toggle menu"
-              aria-expanded={open}
-            >
-              {open ? (
-                <X className="w-5 h-5" aria-hidden />
-              ) : (
-                <MenuIcon className="w-5 h-5" aria-hidden />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Desktop nav */}
-        <nav className="hidden lg:block border-t border-slate-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 flex flex-wrap items-center">
+          {/* Desktop nav */}
+          <nav className="hidden lg:flex flex-wrap items-center flex-1">
             {nav.map((item) => {
               const active = pathname === item.href;
               return (
@@ -191,12 +204,29 @@ export default function Header({
             >
               {t(lang, 'adminLogin')}
             </Link>
-          </div>
-        </nav>
+          </nav>
 
-        {/* Mobile nav */}
+          {/* Mobile controls — separate from the name block */}
+          <div className="ml-auto flex items-center gap-2 py-1.5 shrink-0 lg:hidden">
+            {langToggle}
+            <button
+              onClick={() => setOpen(!open)}
+              className="inline-flex items-center justify-center rounded-full border border-slate-300 bg-white p-2.5"
+              aria-label="Toggle menu"
+              aria-expanded={open}
+            >
+              {open ? (
+                <X className="w-5 h-5" aria-hidden />
+              ) : (
+                <MenuIcon className="w-5 h-5" aria-hidden />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile nav dropdown */}
         {open && (
-          <nav className="lg:hidden border-t border-slate-100 bg-white">
+          <nav className="lg:hidden border-t border-slate-100 bg-white max-h-[70vh] overflow-y-auto">
             {nav.map((item) => (
               <Link
                 key={item.href}
@@ -219,6 +249,6 @@ export default function Header({
           </nav>
         )}
       </div>
-    </header>
+    </>
   );
 }

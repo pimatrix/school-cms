@@ -4,6 +4,13 @@ import PageUnavailable from '@/components/PageUnavailable';
 import { getPageContent, getSettings, pageVisible } from '@/lib/data';
 import { pick, t } from '@/lib/i18n';
 import { getLang } from '@/lib/lang';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Admissions',
+  description: 'Admissions at Govt School of Excellence Bal Vinay Mandir, Indore — how to apply for Classes 1 to 12, documents required and the admission process.',
+};
+
 
 export const dynamic = 'force-dynamic';
 

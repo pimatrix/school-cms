@@ -5,6 +5,13 @@ import PageUnavailable from '@/components/PageUnavailable';
 import { getSettings, mapEmbedSrc, mapSearchUrl, pageVisible } from '@/lib/data';
 import { t } from '@/lib/i18n';
 import { getLang } from '@/lib/lang';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Contact Us',
+  description: 'Contact Govt School of Excellence Bal Vinay Mandir — 7, Nehru Park Road, Vallabh Nagar, Indore, Madhya Pradesh 452003. Send an enquiry online.',
+};
+
 
 export const dynamic = 'force-dynamic';
 

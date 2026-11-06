@@ -12,6 +12,13 @@ import {
 } from '@/lib/data';
 import { pick, t } from '@/lib/i18n';
 import { getLang } from '@/lib/lang';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'News & Notices',
+  description: 'Latest news and notices from Govt School of Excellence Bal Vinay Mandir, Indore.',
+};
+
 
 export const dynamic = 'force-dynamic';
 

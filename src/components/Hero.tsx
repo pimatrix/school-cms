@@ -55,13 +55,15 @@ export default function Hero({
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-14 lg:pt-24 lg:pb-20">
         <div className="max-w-3xl rise-in">
-          <p className="inline-flex items-center gap-2.5 text-saffron-light font-bold tracking-[0.24em] text-[11px] sm:text-xs uppercase">
-            <span className="inline-block h-px w-9 bg-saffron" />
-            {settings.city} • {settings.state}
-          </p>
-          <h2 className="font-display font-extrabold text-[42px] sm:text-6xl xl:text-[72px] leading-[1.05] mt-5">
-            {pick(lang, slide.title, slide.title_hi)}
-          </h2>
+          <h1>
+            <span className="inline-flex items-center gap-2.5 text-saffron-light font-bold tracking-[0.24em] text-[11px] sm:text-xs uppercase">
+              <span className="inline-block h-px w-9 bg-saffron" />
+              {pick(lang, settings.school_name, settings.school_name_hi)} • {settings.city}
+            </span>
+            <span className="block font-display font-extrabold text-[42px] sm:text-6xl xl:text-[72px] leading-[1.05] mt-5">
+              {pick(lang, slide.title, slide.title_hi)}
+            </span>
+          </h1>
           <p className="mt-6 text-white/85 text-base sm:text-lg leading-relaxed max-w-xl">
             {pick(lang, slide.subtitle, slide.subtitle_hi)}
           </p>

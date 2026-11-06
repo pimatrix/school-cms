@@ -4,6 +4,13 @@ import PageUnavailable from '@/components/PageUnavailable';
 import { getGallery, getSettings, pageVisible } from '@/lib/data';
 import { pick, t } from '@/lib/i18n';
 import { getLang } from '@/lib/lang';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Photo Gallery',
+  description: 'Photo and video gallery of Govt School of Excellence Bal Vinay Mandir, Indore — campus, events and student activities.',
+};
+
 
 export const dynamic = 'force-dynamic';
 

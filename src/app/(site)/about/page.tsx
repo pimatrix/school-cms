@@ -3,6 +3,13 @@ import PageUnavailable from '@/components/PageUnavailable';
 import { getPageContent, getSettings, pageVisible } from '@/lib/data';
 import { pick, t } from '@/lib/i18n';
 import { getLang } from '@/lib/lang';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description: 'About Govt School of Excellence Bal Vinay Mandir, Indore — the school history since 1914, a Government of Madhya Pradesh Excellence school affiliated to the MP Board (MPBSE).',
+};
+
 
 export const dynamic = 'force-dynamic';
 

@@ -5,6 +5,13 @@ import PageUnavailable from '@/components/PageUnavailable';
 import { getFacilities, getSettings, pageVisible } from '@/lib/data';
 import { pick, t } from '@/lib/i18n';
 import { getLang } from '@/lib/lang';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Facilities',
+  description: 'Facilities at Govt School of Excellence Bal Vinay Mandir, Indore — science labs, sports ground, Atal Innovation Mission, library and more.',
+};
+
 
 export const dynamic = 'force-dynamic';
 

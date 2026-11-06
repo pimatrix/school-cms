@@ -3,6 +3,13 @@ import PageUnavailable from '@/components/PageUnavailable';
 import { getPageContent, getSettings, pageVisible } from '@/lib/data';
 import { pick, t } from '@/lib/i18n';
 import { getLang } from '@/lib/lang';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Academics',
+  description: 'Academics at Govt School of Excellence Bal Vinay Mandir, Indore — MP Board (MPBSE) curriculum, English medium, Classes 1 to 12.',
+};
+
 
 export const dynamic = 'force-dynamic';
 

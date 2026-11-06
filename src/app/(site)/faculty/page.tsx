@@ -4,6 +4,13 @@ import PageUnavailable from '@/components/PageUnavailable';
 import { getSettings, getTeachers, pageVisible } from '@/lib/data';
 import { pick, t } from '@/lib/i18n';
 import { getLang } from '@/lib/lang';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Our Faculty',
+  description: 'Meet the teachers of Govt School of Excellence Bal Vinay Mandir, Indore.',
+};
+
 
 export const dynamic = 'force-dynamic';
 
