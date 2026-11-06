@@ -1,5 +1,6 @@
 'use client';
 
+import { Check, Loader2, Mail, Phone } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
 import type { Enquiry } from '@/lib/types';
@@ -7,6 +8,11 @@ import type { Enquiry } from '@/lib/types';
 export default function AdminEnquiriesPage() {
   const [items, setItems] = useState<Enquiry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [msg, setMsg] = useState('');
+  // In-app delete confirmation (no native window.confirm): the enquiry
+  // awaiting confirmation, and the one currently being deleted.
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -33,9 +39,20 @@ export default function AdminEnquiriesPage() {
   }
 
   async function remove(item: Enquiry) {
-    if (!window.confirm(`Delete the enquiry from ${item.name}?`)) return;
+    setDeletingId(item.id);
+    setMsg('');
     const supabase = getBrowserClient();
-    await supabase.from('enquiries').delete().eq('id', item.id);
+    const { error } = await supabase
+      .from('enquiries')
+      .delete()
+      .eq('id', item.id);
+    setDeletingId(null);
+    setConfirmId(null);
+    if (error) {
+      setMsg(`Could not delete: ${error.message}`);
+      return;
+    }
+    setMsg('Enquiry deleted.');
     load();
   }
 
@@ -48,6 +65,8 @@ export default function AdminEnquiriesPage() {
         Messages submitted through the website contact form. Only visible to
         signed-in administrators.
       </p>
+
+      {msg && <p className="font-semibold text-sm text-slate-600 mb-4">{msg}</p>}
 
       {loading ? (
         <p className="text-slate-400">Loading…</p>
@@ -74,25 +93,60 @@ export default function AdminEnquiriesPage() {
                       </span>
                     )}
                   </p>
-                  <p className="text-sm text-slate-400">
-                    ✉ {item.email}
-                    {item.phone ? ` • ☎ ${item.phone}` : ''} •{' '}
-                    {new Date(item.created_at).toLocaleString('en-IN')}
+                  <p className="text-sm text-slate-400 flex items-center gap-1.5 flex-wrap">
+                    <Mail className="w-3.5 h-3.5 shrink-0" aria-hidden /> {item.email}
+                    {item.phone && (
+                      <span className="inline-flex items-center gap-1">
+                        • <Phone className="w-3.5 h-3.5 shrink-0" aria-hidden /> {item.phone}
+                      </span>
+                    )}
+                    <span>• {new Date(item.created_at).toLocaleString('en-IN')}</span>
                   </p>
                 </div>
-                <div className="flex gap-2">
-                  <button
-                    onClick={() => toggleRead(item)}
-                    className="text-sm font-semibold text-navy-700 border border-slate-300 rounded-lg px-3 py-1.5 hover:bg-slate-50"
-                  >
-                    {item.is_read ? 'Mark Unread' : '✓ Mark Read'}
-                  </button>
-                  <button
-                    onClick={() => remove(item)}
-                    className="text-sm font-semibold text-clay border border-red-200 rounded-lg px-3 py-1.5 hover:bg-red-50"
-                  >
-                    Delete
-                  </button>
+                <div className="flex gap-2 items-center">
+                  {confirmId === item.id ? (
+                    <>
+                      <span className="text-sm font-semibold text-clay">
+                        Delete this enquiry?
+                      </span>
+                      <button
+                        onClick={() => remove(item)}
+                        disabled={deletingId === item.id}
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-white bg-clay rounded-lg px-3 py-1.5 hover:bg-red-700 disabled:opacity-60"
+                      >
+                        {deletingId === item.id && (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden />
+                        )}
+                        {deletingId === item.id ? 'Deleting…' : 'Delete'}
+                      </button>
+                      <button
+                        onClick={() => setConfirmId(null)}
+                        disabled={deletingId === item.id}
+                        className="text-sm font-semibold text-slate-600 border border-slate-300 rounded-lg px-3 py-1.5 hover:bg-slate-50 disabled:opacity-60"
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => toggleRead(item)}
+                        className="inline-flex items-center gap-1.5 text-sm font-semibold text-navy-700 border border-slate-300 rounded-lg px-3 py-1.5 hover:bg-slate-50"
+                      >
+                        {!item.is_read && <Check className="w-4 h-4" aria-hidden />}
+                        {item.is_read ? 'Mark Unread' : 'Mark Read'}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setMsg('');
+                          setConfirmId(item.id);
+                        }}
+                        className="text-sm font-semibold text-clay border border-red-200 rounded-lg px-3 py-1.5 hover:bg-red-50"
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
               <p className="mt-3 text-slate-600 leading-relaxed whitespace-pre-wrap">

@@ -147,12 +147,12 @@ insert into public.events (title, description, event_date, location, is_active) 
 -- Library / smart classes: typical, not specifically documented —
 -- ADMIN: verify & edit.
 insert into public.facilities (title, description, icon, sort_order, is_active) values
-('New Sports Ground', 'Developed by Indore Municipal Corporation — 2 handball courts, a volleyball court, a kho-kho court, a malkhamb ground and a six-lane morning-walk track.', '🏃', 1, true),
-('Science Laboratories', 'Laboratory work and student projects, including astrophysics and space-science projects reviewed at state level.', '🔬', 2, true),
-('Atal Tinkering & Innovation', 'The school is listed under the Atal Innovation Mission (NITI Aayog) — innovation and tinkering activities for students.', '🚀', 3, true),
-('Vocational Courses', 'Sanctioned vocational job roles for Classes 9–12 — IT/data entry, junior software development and security services.', '🛠️', 4, true),
-('Computer Lab', 'Computer education with practical sessions for every stage.', '💻', 5, true),
-('Library', 'Reference books, board-exam material and daily newspapers for students.', '📚', 6, true);
+('New Sports Ground', 'Developed by Indore Municipal Corporation — 2 handball courts, a volleyball court, a kho-kho court, a malkhamb ground and a six-lane morning-walk track.', 'sports', 1, true),
+('Science Laboratories', 'Laboratory work and student projects, including astrophysics and space-science projects reviewed at state level.', 'science', 2, true),
+('Atal Tinkering & Innovation', 'The school is listed under the Atal Innovation Mission (NITI Aayog) — innovation and tinkering activities for students.', 'innovation', 3, true),
+('Vocational Courses', 'Sanctioned vocational job roles for Classes 9–12 — IT/data entry, junior software development and security services.', 'vocational', 4, true),
+('Computer Lab', 'Computer education with practical sessions for every stage.', 'computer', 5, true),
+('Library', 'Reference books, board-exam material and daily newspapers for students.', 'library', 6, true);
 
 -- ---------- TEACHERS (SAMPLES — real staff names were not publicly
 -- verified; admin must replace these with the actual staff list) ----

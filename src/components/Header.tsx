@@ -1,11 +1,12 @@
 'use client';
 
+import { Mail, Menu as MenuIcon, Phone, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { pageVisible } from '@/lib/data';
 import { pick, t, type Lang, type UiKey } from '@/lib/i18n';
+import { pageVisible } from '@/lib/visibility';
 import type { SiteSettings } from '@/lib/types';
 
 const NAV: { href: string; slug: string; key: UiKey }[] = [
@@ -40,7 +41,6 @@ export default function Header({
   lang: Lang;
 }) {
   const pathname = usePathname();
-  const router = useRouter();
   const [open, setOpen] = useState(false);
 
   const nav = NAV.filter(
@@ -50,9 +50,13 @@ export default function Header({
   const tagline = pick(lang, settings.tagline, settings.tagline_hi);
 
   function setLang(next: Lang) {
-    // One year, site-wide. Server components re-render with the new language.
+    if (next === lang) return;
+    // One year, site-wide — then a FULL page reload, so every server
+    // component (header, ticker, page, footer) re-renders in the new
+    // language. A soft router.refresh() could leave stale pieces behind,
+    // which made the first click look like it did nothing.
     document.cookie = `lang=${next}; path=/; max-age=31536000; SameSite=Lax`;
-    router.refresh();
+    window.location.reload();
   }
 
   const langToggle = (
@@ -98,13 +102,13 @@ export default function Header({
           </p>
           <div className="flex items-center gap-4">
             {settings.phone && (
-              <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="hover:text-saffron-light transition-colors">
-                ☎ {settings.phone}
+              <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-1.5 hover:text-saffron-light transition-colors">
+                <Phone className="w-3.5 h-3.5" aria-hidden /> {settings.phone}
               </a>
             )}
             {settings.email && (
-              <a href={`mailto:${settings.email}`} className="hidden sm:inline hover:text-saffron-light transition-colors">
-                ✉ {settings.email}
+              <a href={`mailto:${settings.email}`} className="hidden sm:inline-flex items-center gap-1.5 hover:text-saffron-light transition-colors">
+                <Mail className="w-3.5 h-3.5" aria-hidden /> {settings.email}
               </a>
             )}
             <span className="hidden md:inline text-white/55">{settings.board_name}</span>
@@ -151,11 +155,17 @@ export default function Header({
             )}
             <button
               onClick={() => setOpen(!open)}
-              className="lg:hidden rounded-full border border-slate-300 bg-white px-4 py-2 font-semibold text-sm"
+              className="lg:hidden inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-4 py-2 font-semibold text-sm"
               aria-label="Toggle menu"
               aria-expanded={open}
             >
-              {open ? '✕' : `☰ ${t(lang, 'menu')}`}
+              {open ? (
+                <X className="w-4 h-4" aria-hidden />
+              ) : (
+                <>
+                  <MenuIcon className="w-4 h-4" aria-hidden /> {t(lang, 'menu')}
+                </>
+              )}
             </button>
           </div>
         </div>

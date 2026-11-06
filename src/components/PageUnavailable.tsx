@@ -1,3 +1,4 @@
+import { Construction } from 'lucide-react';
 import Link from 'next/link';
 import { t, type Lang } from '@/lib/i18n';
 
@@ -8,9 +9,9 @@ export default function PageUnavailable({ lang }: { lang: Lang }) {
   return (
     <section className="max-w-3xl mx-auto px-4 sm:px-6 py-20 lg:py-28 text-center">
       <div className="bg-white rounded-2xl border border-slate-200 shadow-card px-6 py-12 sm:px-12">
-        <p className="text-5xl mb-5" aria-hidden>
-          🛠️
-        </p>
+        <div className="mx-auto mb-6 w-16 h-16 rounded-2xl bg-navy-50 ring-1 ring-navy-100 flex items-center justify-center">
+          <Construction className="w-8 h-8 text-navy-700" aria-hidden />
+        </div>
         <h1 className="font-display font-extrabold text-3xl sm:text-4xl text-navy-900">
           {t(lang, 'pageUnavailableTitle')}
         </h1>

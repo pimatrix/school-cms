@@ -42,7 +42,7 @@ export default function AdminGalleryPage() {
           { key: 'image_url', label: 'Photo / Video', type: 'image' },
         ]}
         listLabel={(r) =>
-          `${r.media_type === 'video' ? '🎬 ' : ''}${String(r.caption || r.image_url || 'Gallery item')}`
+          `${r.media_type === 'video' ? 'Video — ' : ''}${String(r.caption || r.image_url || 'Gallery item')}`
         }
         listSub={(r) => String(r.category || '')}
       />

@@ -1,5 +1,6 @@
 'use client';
 
+import { Loader2, TriangleAlert } from 'lucide-react';
 import { useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
 import { t, type Lang } from '@/lib/i18n';
@@ -97,14 +98,23 @@ export default function ContactForm({ lang = 'en' }: { lang?: Lang }) {
         />
       </div>
       {status === 'error' && (
-        <p className="text-clay font-semibold text-sm">⚠ {t(lang, 'formError')}</p>
+        <p className="text-clay font-semibold text-sm flex items-center gap-1.5">
+          <TriangleAlert className="w-4 h-4 shrink-0" aria-hidden /> {t(lang, 'formError')}
+        </p>
       )}
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="rounded-full bg-navy-700 text-white font-bold px-7 py-3 shadow-soft hover:bg-navy-800 transition-all hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
+        className="inline-flex items-center gap-2 rounded-full bg-navy-700 text-white font-bold px-7 py-3 shadow-soft hover:bg-navy-800 transition-all hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
       >
-        {status === 'sending' ? t(lang, 'sending') : `${t(lang, 'sendEnquiryBtn')} →`}
+        {status === 'sending' ? (
+          <>
+            <Loader2 className="w-5 h-5 animate-spin" aria-hidden />
+            {t(lang, 'sending')}
+          </>
+        ) : (
+          `${t(lang, 'sendEnquiryBtn')} →`
+        )}
       </button>
     </form>
   );

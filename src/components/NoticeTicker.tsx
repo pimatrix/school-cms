@@ -1,5 +1,6 @@
 'use client';
 
+import { Pin } from 'lucide-react';
 import Link from 'next/link';
 import { pick, t, type Lang } from '@/lib/i18n';
 import type { Notice } from '@/lib/types';
@@ -26,7 +27,11 @@ export default function NoticeTicker({
               href="/news"
               className="mx-6 text-sm font-medium text-white/90 hover:text-saffron-light transition-colors"
             >
-              {n.is_pinned ? '📌 ' : '• '}
+              {n.is_pinned ? (
+                <Pin className="inline w-3.5 h-3.5 -mt-0.5 mr-1.5 text-saffron-light" aria-hidden />
+              ) : (
+                '• '
+              )}
               {pick(lang, n.title, n.title_hi)}
             </Link>
           ))}

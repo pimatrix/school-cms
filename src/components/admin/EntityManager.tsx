@@ -1,5 +1,6 @@
 'use client';
 
+import { Loader2 } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
 import { translateToHindi } from '@/lib/translate-client';
@@ -62,6 +63,11 @@ export default function EntityManager({
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState('');
   const [translating, setTranslating] = useState<string>('');
+  // In-app delete confirmation (no native window.confirm — it is easily
+  // dismissed/blocked and looks unprofessional): the row's id awaiting
+  // confirmation, and the row currently being deleted.
+  const [confirmId, setConfirmId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -125,13 +131,13 @@ export default function EntityManager({
   }
 
   async function remove(row: Record<string, unknown>) {
-    if (!window.confirm(`Delete "${listLabel(row)}"? This cannot be undone.`))
-      return;
+    const id = row.id as string;
+    setDeletingId(id);
+    setMsg('');
     const supabase = getBrowserClient();
-    const { error } = await supabase
-      .from(table)
-      .delete()
-      .eq('id', row.id as string);
+    const { error } = await supabase.from(table).delete().eq('id', id);
+    setDeletingId(null);
+    setConfirmId(null);
     if (error) {
       setMsg(`Could not delete: ${error.message}`);
       return;
@@ -322,8 +328,9 @@ export default function EntityManager({
             <button
               type="submit"
               disabled={saving}
-              className="rounded-lg bg-navy-700 hover:bg-navy-800 text-white font-semibold px-6 py-2.5 disabled:opacity-60 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg bg-navy-700 hover:bg-navy-800 text-white font-semibold px-6 py-2.5 disabled:opacity-60 transition-colors"
             >
+              {saving && <Loader2 className="w-4 h-4 animate-spin" aria-hidden />}
               {saving ? 'Saving…' : 'Save'}
             </button>
             <button
@@ -370,18 +377,48 @@ export default function EntityManager({
                   {row.is_active ? 'LIVE' : 'HIDDEN'}
                 </span>
               )}
-              <button
-                onClick={() => startEdit(row)}
-                className="font-semibold text-sm text-navy-700 px-2 py-1 hover:underline"
-              >
-                Edit
-              </button>
-              <button
-                onClick={() => remove(row)}
-                className="font-semibold text-sm text-clay px-2 py-1 hover:underline"
-              >
-                Delete
-              </button>
+              {confirmId === String(row.id) ? (
+                <span className="flex items-center gap-2 shrink-0">
+                  <span className="text-sm font-semibold text-clay hidden sm:inline">
+                    Delete this item?
+                  </span>
+                  <button
+                    onClick={() => remove(row)}
+                    disabled={deletingId === String(row.id)}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-clay text-white text-sm font-semibold px-3 py-1.5 hover:bg-red-700 disabled:opacity-60 transition-colors"
+                  >
+                    {deletingId === String(row.id) && (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden />
+                    )}
+                    {deletingId === String(row.id) ? 'Deleting…' : 'Delete'}
+                  </button>
+                  <button
+                    onClick={() => setConfirmId(null)}
+                    disabled={deletingId === String(row.id)}
+                    className="rounded-lg border border-slate-300 text-slate-600 text-sm font-semibold px-3 py-1.5 hover:bg-slate-50 disabled:opacity-60 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </span>
+              ) : (
+                <>
+                  <button
+                    onClick={() => startEdit(row)}
+                    className="font-semibold text-sm text-navy-700 px-2 py-1 hover:underline"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMsg('');
+                      setConfirmId(String(row.id));
+                    }}
+                    className="font-semibold text-sm text-clay px-2 py-1 hover:underline"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
             </li>
           ))}
         </ul>

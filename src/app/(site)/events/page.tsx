@@ -1,3 +1,4 @@
+import { MapPin } from 'lucide-react';
 import Image from 'next/image';
 import PageShell from '@/components/PageShell';
 import PageUnavailable from '@/components/PageUnavailable';
@@ -45,9 +46,13 @@ export default async function EventsPage() {
           <h3 className="font-display font-bold text-lg leading-snug text-navy-900">
             {pick(l, ev.title, ev.title_hi)}
           </h3>
-          <p className="text-xs font-semibold text-navy-700 mt-1">
+          <p className="text-xs font-semibold text-navy-700 mt-1 flex items-center gap-1 flex-wrap">
             {formatDate(ev.event_date, l)}
-            {ev.location ? ` • 📍 ${ev.location}` : ''}
+            {ev.location && (
+              <span className="inline-flex items-center gap-1">
+                • <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden /> {ev.location}
+              </span>
+            )}
           </p>
           <p className="text-sm text-slate-500 mt-2 leading-relaxed">
             {pick(l, ev.description, ev.description_hi)}

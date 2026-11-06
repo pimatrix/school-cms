@@ -47,6 +47,20 @@ body {
   animation-play-state: paused;
 }
 
+/* While a navigation is in flight (set by the NavProgress component):
+   progress cursor + a gentle fade of the page body, so clicks always
+   give visible feedback. */
+body.page-loading {
+  cursor: progress;
+}
+body.page-loading main {
+  opacity: 0.55;
+  transition: opacity 0.18s ease;
+}
+main {
+  transition: opacity 0.18s ease;
+}
+
 /* Gentle reveal on load */
 @keyframes rise-in {
   from { opacity: 0; transform: translateY(14px); }

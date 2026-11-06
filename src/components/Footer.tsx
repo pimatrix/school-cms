@@ -1,7 +1,41 @@
+import { GraduationCap, Mail, MapPin, Phone } from 'lucide-react';
 import Link from 'next/link';
 import { externalHref, pageVisible } from '@/lib/data';
 import { pick, t, type Lang } from '@/lib/i18n';
 import type { SiteSettings } from '@/lib/types';
+
+// Social brand marks — lucide no longer ships brand icons, so these are
+// small hand-drawn inline SVGs in the same stroke/fill style.
+function FacebookIcon({ className = 'w-[18px] h-[18px]' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path d="M13.5 21v-7.2h2.4l.4-2.8h-2.8V9.2c0-.8.2-1.4 1.4-1.4h1.5V5.3c-.3 0-1.2-.1-2.2-.1-2.2 0-3.7 1.3-3.7 3.8v2H8v2.8h2.5V21h3Z" />
+    </svg>
+  );
+}
+function InstagramIcon({ className = 'w-[18px] h-[18px]' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className} aria-hidden>
+      <rect x="3.5" y="3.5" width="17" height="17" rx="4.5" />
+      <circle cx="12" cy="12" r="3.8" />
+      <circle cx="17" cy="7" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+function XIcon({ className = 'w-[16px] h-[16px]' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path d="M17.8 4h2.7l-6 6.8L21.5 20h-5.5l-4.3-5.6L6.7 20H4l6.4-7.3L3.7 4h5.6l3.9 5.1L17.8 4Zm-1 14.3h1.5L8.6 5.6H7L16.8 18.3Z" />
+    </svg>
+  );
+}
+function YoutubeIcon({ className = 'w-[19px] h-[19px]' }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden>
+      <path d="M21.6 7.2a2.5 2.5 0 0 0-1.8-1.8C18.2 5 12 5 12 5s-6.2 0-7.8.4A2.5 2.5 0 0 0 2.4 7.2 26 26 0 0 0 2 12a26 26 0 0 0 .4 4.8 2.5 2.5 0 0 0 1.8 1.8c1.6.4 7.8.4 7.8.4s6.2 0 7.8-.4a2.5 2.5 0 0 0 1.8-1.8A26 26 0 0 0 22 12a26 26 0 0 0-.4-4.8ZM10 15.2V8.8L15.5 12 10 15.2Z" />
+    </svg>
+  );
+}
 
 export default function Footer({
   settings,
@@ -11,10 +45,10 @@ export default function Footer({
   lang: Lang;
 }) {
   const socials = [
-    { label: 'Facebook', url: settings.facebook_url, icon: 'f' },
-    { label: 'Instagram', url: settings.instagram_url, icon: '◎' },
-    { label: 'Twitter / X', url: settings.twitter_url, icon: '𝕏' },
-    { label: 'YouTube', url: settings.youtube_url, icon: '▶' },
+    { label: 'Facebook', url: settings.facebook_url, Icon: FacebookIcon },
+    { label: 'Instagram', url: settings.instagram_url, Icon: InstagramIcon },
+    { label: 'Twitter / X', url: settings.twitter_url, Icon: XIcon },
+    { label: 'YouTube', url: settings.youtube_url, Icon: YoutubeIcon },
   ].filter((s) => s.url);
 
   const quickLinks = [
@@ -53,9 +87,9 @@ export default function Footer({
                   target="_blank"
                   rel="noreferrer"
                   aria-label={s.label}
-                  className="w-10 h-10 rounded-full flex items-center justify-center ring-1 ring-white/30 hover:bg-saffron hover:text-navy-950 hover:ring-saffron font-bold transition-colors"
+                  className="w-10 h-10 rounded-full flex items-center justify-center ring-1 ring-white/30 hover:bg-saffron hover:text-navy-950 hover:ring-saffron transition-colors"
                 >
-                  {s.icon}
+                  <s.Icon />
                 </a>
               ))}
             </div>
@@ -102,25 +136,30 @@ export default function Footer({
             {t(lang, 'reachUs')}
           </h4>
           <ul className="space-y-3 text-sm text-white/70 leading-relaxed">
-            <li>
-              📍 {settings.address}, {settings.city}, {settings.state}
-              {settings.pincode ? ` — ${settings.pincode}` : ''}
+            <li className="flex items-start gap-2">
+              <MapPin className="w-4 h-4 mt-0.5 shrink-0 text-saffron-light" aria-hidden />
+              <span>
+                {settings.address}, {settings.city}, {settings.state}
+                {settings.pincode ? ` — ${settings.pincode}` : ''}
+              </span>
             </li>
             {settings.phone && (
               <li>
-                <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="hover:text-saffron-light transition-colors">
-                  ☎ {settings.phone}
+                <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 hover:text-saffron-light transition-colors">
+                  <Phone className="w-4 h-4 shrink-0 text-saffron-light" aria-hidden /> {settings.phone}
                 </a>
               </li>
             )}
             {settings.email && (
               <li>
-                <a href={`mailto:${settings.email}`} className="hover:text-saffron-light transition-colors">
-                  ✉ {settings.email}
+                <a href={`mailto:${settings.email}`} className="inline-flex items-center gap-2 hover:text-saffron-light transition-colors">
+                  <Mail className="w-4 h-4 shrink-0 text-saffron-light" aria-hidden /> {settings.email}
                 </a>
               </li>
             )}
-            <li>🎓 {settings.board_name}</li>
+            <li className="flex items-center gap-2">
+              <GraduationCap className="w-4 h-4 shrink-0 text-saffron-light" aria-hidden /> {settings.board_name}
+            </li>
           </ul>
         </div>
       </div>

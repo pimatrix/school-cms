@@ -284,7 +284,7 @@ export default function AdminManualPage() {
           <Controls publicPage="the Facilities page and the facilities strip on the homepage." />
           <How>
             <li>Add each facility with a name, a one-line description and, if available, a photo.</li>
-            <li>The <strong>Icon</strong> is a single emoji (for example 🔬 📚 🖥️ 🏃 ⚽ 🎭) shown when no photo is set.</li>
+            <li>Choose an <strong>Icon</strong> from the list (school, science, sports, library, computer and more) — it is shown on the website when no photo is set.</li>
           </How>
         </Section>
 

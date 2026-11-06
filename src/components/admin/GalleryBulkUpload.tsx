@@ -1,5 +1,6 @@
 'use client';
 
+import { Clapperboard, Image as ImageIcon } from 'lucide-react';
 import { useRef, useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
 import { adminInputCls } from './EntityManager';
@@ -209,8 +210,12 @@ export default function GalleryBulkUpload({ onDone }: { onDone: () => void }) {
               key={item.id}
               className="flex items-center gap-3 rounded-lg border border-slate-200 px-3.5 py-2.5"
             >
-              <span className="text-lg" aria-hidden>
-                {item.isVideo ? '🎬' : '🖼️'}
+              <span className="shrink-0 text-navy-700" aria-hidden>
+                {item.isVideo ? (
+                  <Clapperboard className="w-5 h-5" />
+                ) : (
+                  <ImageIcon className="w-5 h-5" />
+                )}
               </span>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-medium text-slate-700 truncate">

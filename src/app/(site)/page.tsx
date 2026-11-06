@@ -1,5 +1,7 @@
+import { FileText, Mail, MapPin, Phone, Pin } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import FacilityIcon from '@/components/FacilityIcon';
 import Hero from '@/components/Hero';
 import SectionHeading from '@/components/SectionHeading';
 import {
@@ -99,7 +101,13 @@ export default async function HomePage() {
                   {notices.map((n) => (
                     <li key={n.id} className={`${cardCls} p-5`}>
                       <div className="flex items-start gap-3">
-                        <span className="text-lg leading-none mt-0.5">{n.is_pinned ? '📌' : '📄'}</span>
+                        <span className="leading-none mt-0.5 shrink-0">
+                          {n.is_pinned ? (
+                            <Pin className="w-5 h-5 text-saffron-dark" aria-hidden />
+                          ) : (
+                            <FileText className="w-5 h-5 text-navy-600" aria-hidden />
+                          )}
+                        </span>
                         <div className="min-w-0">
                           <p className="font-bold leading-snug">
                             {pick(lang, n.title, n.title_hi)}
@@ -204,8 +212,8 @@ export default async function HomePage() {
                     {pick(lang, ev.description, ev.description_hi)}
                   </p>
                   {ev.location && (
-                    <p className="text-xs font-semibold text-navy-700 mt-2.5">
-                      📍 {ev.location}
+                    <p className="text-xs font-semibold text-navy-700 mt-2.5 flex items-center gap-1">
+                      <MapPin className="w-3.5 h-3.5 shrink-0" aria-hidden /> {ev.location}
                     </p>
                   )}
                 </div>
@@ -233,7 +241,7 @@ export default async function HomePage() {
                   key={f.id}
                   className="rounded-2xl bg-white/[0.06] ring-1 ring-white/15 p-6 transition-colors hover:bg-white/10"
                 >
-                  <p className="text-[34px] leading-none">{f.icon}</p>
+                  <FacilityIcon icon={f.icon} className="w-9 h-9 text-saffron-light" />
                   <h3 className="font-display font-bold text-lg mt-3.5">
                     {pick(lang, f.title, f.title_hi)}
                   </h3>
@@ -343,21 +351,24 @@ export default async function HomePage() {
             <h2 className="font-display font-extrabold text-3xl sm:text-[40px] text-navy-900 leading-[1.12]">
               {t(lang, 'findTheSchool')}
             </h2>
-            <p className="mt-5 text-slate-600 leading-relaxed text-[17px]">
-              📍 {settings.address}, {settings.city}, {settings.state}
-              {settings.pincode ? ` — ${settings.pincode}` : ''}
+            <p className="mt-5 text-slate-600 leading-relaxed text-[17px] flex items-start gap-2">
+              <MapPin className="w-5 h-5 mt-1 shrink-0 text-navy-700" aria-hidden />
+              <span>
+                {settings.address}, {settings.city}, {settings.state}
+                {settings.pincode ? ` — ${settings.pincode}` : ''}
+              </span>
             </p>
             {settings.phone && (
               <p className="mt-2.5 font-semibold">
-                <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="hover:text-navy-800 transition-colors">
-                  ☎ {settings.phone}
+                <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 hover:text-navy-800 transition-colors">
+                  <Phone className="w-4 h-4 shrink-0 text-navy-700" aria-hidden /> {settings.phone}
                 </a>
               </p>
             )}
             {settings.email && (
               <p className="mt-1.5 font-semibold">
-                <a href={`mailto:${settings.email}`} className="hover:text-navy-800 transition-colors">
-                  ✉ {settings.email}
+                <a href={`mailto:${settings.email}`} className="inline-flex items-center gap-2 hover:text-navy-800 transition-colors">
+                  <Mail className="w-4 h-4 shrink-0 text-navy-700" aria-hidden /> {settings.email}
                 </a>
               </p>
             )}

@@ -1,23 +1,37 @@
 'use client';
 
+import {
+  BookOpen,
+  CalendarDays,
+  FileText,
+  GraduationCap,
+  Images,
+  LayoutDashboard,
+  Mail,
+  Megaphone,
+  Newspaper,
+  School,
+  Settings,
+  type LucideIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
 
-const MENU = [
-  { href: '/admin', label: 'Dashboard', icon: '▦' },
-  { href: '/admin/settings', label: 'Site Settings', icon: '⚙' },
-  { href: '/admin/hero', label: 'Hero Slides', icon: '🖼' },
-  { href: '/admin/notices', label: 'Notices', icon: '📢' },
-  { href: '/admin/news', label: 'News', icon: '📰' },
-  { href: '/admin/events', label: 'Events', icon: '📅' },
-  { href: '/admin/gallery', label: 'Gallery', icon: '🎞' },
-  { href: '/admin/teachers', label: 'Teachers', icon: '👩‍🏫' },
-  { href: '/admin/facilities', label: 'Facilities', icon: '🏫' },
-  { href: '/admin/pages', label: 'Page Content', icon: '📄' },
-  { href: '/admin/enquiries', label: 'Enquiries', icon: '✉' },
-  { href: '/admin/manual', label: 'Manual', icon: '📘' },
+const MENU: { href: string; label: string; Icon: LucideIcon }[] = [
+  { href: '/admin', label: 'Dashboard', Icon: LayoutDashboard },
+  { href: '/admin/settings', label: 'Site Settings', Icon: Settings },
+  { href: '/admin/hero', label: 'Hero Slides', Icon: Images },
+  { href: '/admin/notices', label: 'Notices', Icon: Megaphone },
+  { href: '/admin/news', label: 'News', Icon: Newspaper },
+  { href: '/admin/events', label: 'Events', Icon: CalendarDays },
+  { href: '/admin/gallery', label: 'Gallery', Icon: Images },
+  { href: '/admin/teachers', label: 'Teachers', Icon: GraduationCap },
+  { href: '/admin/facilities', label: 'Facilities', Icon: School },
+  { href: '/admin/pages', label: 'Page Content', Icon: FileText },
+  { href: '/admin/enquiries', label: 'Enquiries', Icon: Mail },
+  { href: '/admin/manual', label: 'Manual', Icon: BookOpen },
 ];
 
 export default function AdminLayout({
@@ -99,9 +113,7 @@ export default function AdminLayout({
                     : 'text-slate-600 hover:bg-slate-100 hover:text-navy-900'
                 }`}
               >
-                <span className="w-5 text-center" aria-hidden>
-                  {m.icon}
-                </span>
+                <m.Icon className="w-5 h-5 shrink-0" aria-hidden />
                 {m.label}
               </Link>
             );

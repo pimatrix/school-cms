@@ -1,3 +1,4 @@
+import { GraduationCap, Mail, MapPin, Phone } from 'lucide-react';
 import ContactForm from '@/components/ContactForm';
 import PageShell from '@/components/PageShell';
 import PageUnavailable from '@/components/PageUnavailable';
@@ -21,25 +22,30 @@ export default async function ContactPage() {
               {t(lang, 'schoolOffice')}
             </h2>
             <ul className="mt-5 space-y-3.5 text-[15px] leading-relaxed">
-              <li>
-                📍 {settings.address}, {settings.city}, {settings.state}
-                {settings.pincode ? ` — ${settings.pincode}` : ''}
+              <li className="flex items-start gap-2">
+                <MapPin className="w-5 h-5 mt-0.5 shrink-0 text-saffron-light" aria-hidden />
+                <span>
+                  {settings.address}, {settings.city}, {settings.state}
+                  {settings.pincode ? ` — ${settings.pincode}` : ''}
+                </span>
               </li>
               {settings.phone && (
                 <li>
-                  <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="hover:text-saffron-light transition-colors">
-                    ☎ {settings.phone}
+                  <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-2 hover:text-saffron-light transition-colors">
+                    <Phone className="w-4 h-4 shrink-0 text-saffron-light" aria-hidden /> {settings.phone}
                   </a>
                 </li>
               )}
               {settings.email && (
                 <li>
-                  <a href={`mailto:${settings.email}`} className="hover:text-saffron-light transition-colors">
-                    ✉ {settings.email}
+                  <a href={`mailto:${settings.email}`} className="inline-flex items-center gap-2 hover:text-saffron-light transition-colors">
+                    <Mail className="w-4 h-4 shrink-0 text-saffron-light" aria-hidden /> {settings.email}
                   </a>
                 </li>
               )}
-              <li>🎓 {settings.board_name}</li>
+              <li className="flex items-center gap-2">
+                <GraduationCap className="w-4 h-4 shrink-0 text-saffron-light" aria-hidden /> {settings.board_name}
+              </li>
               <li className="text-white/60 text-sm">{settings.affiliation}</li>
             </ul>
           </div>

@@ -1,18 +1,29 @@
 'use client';
 
+import {
+  CalendarDays,
+  Camera,
+  GraduationCap,
+  Images,
+  Mail,
+  Newspaper,
+  Pin,
+  School,
+  type LucideIcon,
+} from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
 
-const CARDS = [
-  { table: 'notices', label: 'Notices', href: '/admin/notices', icon: '📌' },
-  { table: 'news', label: 'News Stories', href: '/admin/news', icon: '📰' },
-  { table: 'events', label: 'Events', href: '/admin/events', icon: '📅' },
-  { table: 'gallery_images', label: 'Gallery Photos', href: '/admin/gallery', icon: '📷' },
-  { table: 'teachers', label: 'Teachers', href: '/admin/teachers', icon: '👩‍🏫' },
-  { table: 'facilities', label: 'Facilities', href: '/admin/facilities', icon: '🏫' },
-  { table: 'enquiries', label: 'Enquiries', href: '/admin/enquiries', icon: '✉️' },
-  { table: 'hero_slides', label: 'Hero Slides', href: '/admin/hero', icon: '🖼️' },
+const CARDS: { table: string; label: string; href: string; Icon: LucideIcon }[] = [
+  { table: 'notices', label: 'Notices', href: '/admin/notices', Icon: Pin },
+  { table: 'news', label: 'News Stories', href: '/admin/news', Icon: Newspaper },
+  { table: 'events', label: 'Events', href: '/admin/events', Icon: CalendarDays },
+  { table: 'gallery_images', label: 'Gallery Photos', href: '/admin/gallery', Icon: Camera },
+  { table: 'teachers', label: 'Teachers', href: '/admin/teachers', Icon: GraduationCap },
+  { table: 'facilities', label: 'Facilities', href: '/admin/facilities', Icon: School },
+  { table: 'enquiries', label: 'Enquiries', href: '/admin/enquiries', Icon: Mail },
+  { table: 'hero_slides', label: 'Hero Slides', href: '/admin/hero', Icon: Images },
 ];
 
 export default function AdminDashboard() {
@@ -47,9 +58,10 @@ export default function AdminDashboard() {
       {unread !== null && unread > 0 && (
         <Link
           href="/admin/enquiries"
-          className="block mt-5 bg-saffron rounded-xl shadow-card px-5 py-3.5 font-semibold text-navy-950"
+          className="flex items-center gap-2 mt-5 bg-saffron rounded-xl shadow-card px-5 py-3.5 font-semibold text-navy-950"
         >
-          ✉️ You have {unread} unread {unread === 1 ? 'enquiry' : 'enquiries'} — click to view →
+          <Mail className="w-5 h-5 shrink-0" aria-hidden />
+          You have {unread} unread {unread === 1 ? 'enquiry' : 'enquiries'} — click to view →
         </Link>
       )}
 
@@ -60,7 +72,7 @@ export default function AdminDashboard() {
             href={c.href}
             className="bg-white rounded-xl border border-slate-200 shadow-card p-5 hover:-translate-y-0.5 hover:shadow-lift transition"
           >
-            <p className="text-3xl">{c.icon}</p>
+            <c.Icon className="w-8 h-8 text-navy-700" aria-hidden />
             <p className="font-display font-black text-3xl mt-2">
               {counts[c.table] === undefined || counts[c.table] === null
                 ? '…'

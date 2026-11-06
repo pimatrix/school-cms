@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import FacilityIcon from '@/components/FacilityIcon';
 import PageShell from '@/components/PageShell';
 import PageUnavailable from '@/components/PageUnavailable';
 import { getFacilities, getSettings, pageVisible } from '@/lib/data';
@@ -32,8 +33,8 @@ export default async function FacilitiesPage() {
                 className="w-full h-44 object-cover"
               />
             ) : (
-              <div className="w-full h-32 bg-gradient-to-br from-navy-600 to-navy-800 flex items-center justify-center text-5xl">
-                {f.icon}
+              <div className="w-full h-32 bg-gradient-to-br from-navy-600 to-navy-800 flex items-center justify-center">
+                <FacilityIcon icon={f.icon} className="w-12 h-12 text-white" />
               </div>
             )}
             <div className="p-6">

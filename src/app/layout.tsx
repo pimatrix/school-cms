@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import NavProgress from '@/components/NavProgress';
 import { getLang } from '@/lib/lang';
 import './globals.css';
 
@@ -28,7 +29,10 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <NavProgress />
+        {children}
+      </body>
     </html>
   );
 }

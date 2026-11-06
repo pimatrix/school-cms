@@ -1,3 +1,4 @@
+import { Newspaper, Pin } from 'lucide-react';
 import Image from 'next/image';
 import PageShell from '@/components/PageShell';
 import PageUnavailable from '@/components/PageUnavailable';
@@ -28,8 +29,8 @@ export default async function NewsPage() {
       <div className="grid lg:grid-cols-12 gap-12">
         {/* Notices column */}
         <div className="lg:col-span-5">
-          <h2 className="font-display font-bold text-2xl text-navy-900 mb-6">
-            📌 {t(lang, 'noticeBoard')}
+          <h2 className="font-display font-bold text-2xl text-navy-900 mb-6 flex items-center gap-2.5">
+            <Pin className="w-6 h-6 text-saffron-dark shrink-0" aria-hidden /> {t(lang, 'noticeBoard')}
           </h2>
           <ul className="space-y-3.5">
             {notices.map((n) => (
@@ -38,7 +39,9 @@ export default async function NewsPage() {
                 className="rounded-2xl bg-white shadow-card ring-1 ring-slate-900/5 p-5"
               >
                 <p className="font-bold leading-snug">
-                  {n.is_pinned && <span className="text-clay">📌 </span>}
+                  {n.is_pinned && (
+                    <Pin className="inline w-4 h-4 -mt-0.5 mr-1.5 text-clay" aria-hidden />
+                  )}
                   {pick(lang, n.title, n.title_hi)}
                 </p>
                 {pick(lang, n.body, n.body_hi) && (
@@ -72,8 +75,8 @@ export default async function NewsPage() {
 
         {/* News column */}
         <div className="lg:col-span-7">
-          <h2 className="font-display font-bold text-2xl text-navy-900 mb-6">
-            📰 {t(lang, 'newsStoriesTitle')}
+          <h2 className="font-display font-bold text-2xl text-navy-900 mb-6 flex items-center gap-2.5">
+            <Newspaper className="w-6 h-6 text-saffron-dark shrink-0" aria-hidden /> {t(lang, 'newsStoriesTitle')}
           </h2>
           <div className="space-y-6">
             {news.map((item) => (
