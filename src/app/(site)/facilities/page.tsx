@@ -12,7 +12,7 @@ export default async function FacilitiesPage() {
         {facilities.map((f) => (
           <article
             key={f.id}
-            className="bg-paper border-2 border-ink shadow-card overflow-hidden"
+            className="rounded-2xl bg-white shadow-card ring-1 ring-ink/5 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
           >
             {f.image_url ? (
               <Image
@@ -23,13 +23,13 @@ export default async function FacilitiesPage() {
                 className="w-full h-44 object-cover"
               />
             ) : (
-              <div className="w-full h-28 bg-pine flex items-center justify-center text-5xl">
+              <div className="w-full h-32 bg-gradient-to-br from-pine to-pine-dark flex items-center justify-center text-5xl">
                 {f.icon}
               </div>
             )}
-            <div className="p-5">
-              <h2 className="font-display font-bold text-xl">
-                {f.icon} {f.title}
+            <div className="p-6">
+              <h2 className="font-display font-bold text-xl text-pine-deep">
+                {f.title}
               </h2>
               <p className="text-ink/70 mt-2 leading-relaxed">{f.description}</p>
             </div>

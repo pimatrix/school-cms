@@ -11,11 +11,11 @@ const TEXT_FIELDS: {
   placeholder?: string;
   group: string;
 }[] = [
-  { key: 'school_name', label: 'School ka Naam', group: 'Basic' },
-  { key: 'tagline', label: 'Tagline (naam ke neeche wali line)', group: 'Basic' },
-  { key: 'established_year', label: 'Established Year (hero stats ke liye)', placeholder: 'e.g. 1962', group: 'Basic' },
-  { key: 'students_count', label: 'Students Count (hero stats)', placeholder: 'e.g. 1,500+', group: 'Basic' },
-  { key: 'staff_count', label: 'Faculty Count (hero stats)', placeholder: 'e.g. 60+', group: 'Basic' },
+  { key: 'school_name', label: 'School Name', group: 'Basic' },
+  { key: 'tagline', label: 'Tagline', group: 'Basic' },
+  { key: 'established_year', label: 'Established Year', placeholder: 'e.g. 1962', group: 'Basic' },
+  { key: 'students_count', label: 'Students Count', placeholder: 'e.g. 1,500+', group: 'Basic' },
+  { key: 'staff_count', label: 'Faculty Count', placeholder: 'e.g. 60+', group: 'Basic' },
   { key: 'board_name', label: 'Board Name', placeholder: 'MP Board (MPBSE)', group: 'Basic' },
   { key: 'affiliation', label: 'Affiliation / Department Line', group: 'Basic' },
   { key: 'email', label: 'Email', group: 'Contact' },
@@ -24,8 +24,8 @@ const TEXT_FIELDS: {
   { key: 'city', label: 'City', group: 'Contact' },
   { key: 'state', label: 'State', group: 'Contact' },
   { key: 'pincode', label: 'PIN Code', group: 'Contact' },
-  { key: 'map_query', label: 'Google Maps Search (map isi se banta hai)', placeholder: 'School name + area + city', group: 'Map & Social' },
-  { key: 'map_embed_url', label: 'Map Embed URL (optional — khaali chhodein to upar wali search se map banega)', group: 'Map & Social' },
+  { key: 'map_query', label: 'Google Maps Search Query', placeholder: 'School name, area, city', group: 'Map & Social' },
+  { key: 'map_embed_url', label: 'Map Embed URL (optional)', group: 'Map & Social' },
   { key: 'facebook_url', label: 'Facebook URL', group: 'Map & Social' },
   { key: 'instagram_url', label: 'Instagram URL', group: 'Map & Social' },
   { key: 'twitter_url', label: 'Twitter / X URL', group: 'Map & Social' },
@@ -65,7 +65,7 @@ export default function AdminSettingsPage() {
       .upsert({ ...form, id: 1, updated_at: new Date().toISOString() });
     setSaving(false);
     setMsg(
-      error ? `⚠ Save nahi hua: ${error.message}` : '✅ Settings saved! Website refresh karke dekhein.'
+      error ? `Could not save: ${error.message}` : 'Settings saved.'
     );
   }
 
@@ -77,8 +77,7 @@ export default function AdminSettingsPage() {
         Site Settings
       </h1>
       <p className="text-ink/65 mt-1 mb-6">
-        School ki pehchan — naam, logo, contact, map aur social links. Sab
-        kuch yahi se badalta hai.
+        School identity — name, logo, contact details, map and social links.
       </p>
 
       <form onSubmit={save} className="space-y-8">
@@ -89,13 +88,13 @@ export default function AdminSettingsPage() {
             onChange={(url) => setForm({ ...form, logo_url: url })}
           />
           <p className="text-sm text-ink/55 mt-2">
-            Logo nahi hai to naam ke initials wala box apne aap dikhta hai.
+            If no logo is uploaded, a monogram with the school's initials is shown instead.
           </p>
         </div>
 
         <div className="bg-white border-2 border-ink shadow-card p-5 sm:p-6">
           <label className="block text-sm font-bold mb-1.5">
-            Homepage Short About (footer aur homepage par dikhta hai)
+            Homepage Short About
           </label>
           <textarea
             rows={3}
@@ -137,7 +136,7 @@ export default function AdminSettingsPage() {
             disabled={saving}
             className="bg-pine text-paper font-bold px-7 py-3 border-2 border-ink shadow-card disabled:opacity-60"
           >
-            {saving ? 'Saving…' : '💾 Save Settings'}
+            {saving ? 'Saving…' : 'Save Settings'}
           </button>
           {msg && <p className="font-semibold text-sm">{msg}</p>}
         </div>

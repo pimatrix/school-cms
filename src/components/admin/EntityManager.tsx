@@ -102,19 +102,27 @@ export default function EntityManager({
 
     setSaving(false);
     if (error) {
-      setMsg(`⚠ Save nahi hua: ${error.message}`);
+      setMsg(`Could not save: ${error.message}`);
     } else {
-      setMsg('✅ Saved!');
+      setMsg('Saved.');
       setForm(null);
       load();
     }
   }
 
   async function remove(row: Record<string, unknown>) {
-    if (!window.confirm(`Delete "${listLabel(row)}"? Ye wapas nahi aayega.`))
+    if (!window.confirm(`Delete "${listLabel(row)}"? This cannot be undone.`))
       return;
     const supabase = getBrowserClient();
-    await supabase.from(table).delete().eq('id', row.id as string);
+    const { error } = await supabase
+      .from(table)
+      .delete()
+      .eq('id', row.id as string);
+    if (error) {
+      setMsg(`Could not delete: ${error.message}`);
+      return;
+    }
+    setMsg('Deleted.');
     load();
   }
 
@@ -193,7 +201,7 @@ export default function EntityManager({
           className="bg-white border-2 border-ink shadow-card p-5 sm:p-6 mb-8 space-y-4"
         >
           <h2 className="font-display font-bold text-xl">
-            {form.id ? '✏️ Edit' : '➕ New'} — {title}
+            {form.id ? 'Edit' : 'New'} — {title}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
             {fields
@@ -207,7 +215,7 @@ export default function EntityManager({
               disabled={saving}
               className="bg-pine text-paper font-bold px-6 py-2.5 border-2 border-ink disabled:opacity-60"
             >
-              {saving ? 'Saving…' : '💾 Save'}
+              {saving ? 'Saving…' : 'Save'}
             </button>
             <button
               type="button"
@@ -226,8 +234,8 @@ export default function EntityManager({
         <p className="text-ink/60">Loading…</p>
       ) : rows.length === 0 ? (
         <div className="border-2 border-dashed border-ink/30 p-8 text-center text-ink/60">
-          Abhi kuch nahi hai. Upar <strong>+ Add New</strong> se pehla item
-          jodein — website par turant dikhega.
+          Nothing here yet. Use <strong>+ Add New</strong> to create the
+          first item — it will appear on the website right away.
         </div>
       ) : (
         <ul className="space-y-2.5">

@@ -33,7 +33,7 @@ export default function AdminEnquiriesPage() {
   }
 
   async function remove(item: Enquiry) {
-    if (!window.confirm(`${item.name} ki enquiry delete karein?`)) return;
+    if (!window.confirm(`Delete the enquiry from ${item.name}?`)) return;
     const supabase = getBrowserClient();
     await supabase.from('enquiries').delete().eq('id', item.id);
     load();
@@ -45,15 +45,15 @@ export default function AdminEnquiriesPage() {
         Enquiries Inbox
       </h1>
       <p className="text-ink/65 mt-1 mb-6">
-        Website ke Contact form se aaye hue messages. Ye sirf login kiye hue
-        admin ko dikhte hain — bahar wala koi nahi padh sakta.
+        Messages submitted through the website contact form. Only visible to
+        signed-in administrators.
       </p>
 
       {loading ? (
         <p className="text-ink/60">Loading…</p>
       ) : items.length === 0 ? (
         <div className="border-2 border-dashed border-ink/30 p-8 text-center text-ink/60">
-          Abhi koi enquiry nahi aayi.
+          No enquiries yet.
         </div>
       ) : (
         <ul className="space-y-3">

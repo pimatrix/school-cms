@@ -7,17 +7,17 @@ export default function AdminTeachersPage() {
     <EntityManager
       table="teachers"
       title="Teachers & Staff"
-      description="Shikshak aur staff ki list — naam, pad (role), vishay, photo. Faculty page par dikhta hai."
+      description="Teaching and non-teaching staff, shown on the Faculty page."
       orderBy="sort_order"
       defaults={{ is_active: true, sort_order: 0 }}
       fields={[
-        { key: 'name', label: 'Naam', type: 'text' },
-        { key: 'role', label: 'Pad / Role', type: 'text', placeholder: 'Principal / PGT Hindi / TGT Maths' },
-        { key: 'subject', label: 'Vishay (Subject)', type: 'text' },
-        { key: 'qualification', label: 'Yogyata (Qualification)', type: 'text', placeholder: 'M.A., B.Ed.' },
+        { key: 'name', label: 'Name', type: 'text' },
+        { key: 'role', label: 'Role', type: 'text', placeholder: 'Principal / PGT Hindi / TGT Maths' },
+        { key: 'subject', label: 'Subject', type: 'text' },
+        { key: 'qualification', label: 'Qualification', type: 'text', placeholder: 'M.A., B.Ed.' },
         { key: 'email', label: 'Email (optional)', type: 'text' },
-        { key: 'sort_order', label: 'Order (Principal = 1, phir bade se chhota)', type: 'number' },
-        { key: 'is_active', label: 'Website par dikhayein (Active)', type: 'checkbox' },
+        { key: 'sort_order', label: 'Order (Principal first)', type: 'number' },
+        { key: 'is_active', label: 'Show on website (Active)', type: 'checkbox' },
         { key: 'photo_url', label: 'Photo', type: 'image' },
       ]}
       listLabel={(r) => String(r.name || 'Unnamed')}

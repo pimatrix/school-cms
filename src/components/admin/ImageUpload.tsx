@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { useRef, useState } from 'react';
 
 export default function ImageUpload({
@@ -27,7 +26,7 @@ export default function ImageUpload({
       if (!res.ok) throw new Error(data.error || 'Upload failed');
       onChange(data.url);
     } catch (e) {
-      setError(e instanceof Error ? e.message : 'Upload fail ho gaya.');
+      setError(e instanceof Error ? e.message : 'Upload failed.');
     } finally {
       setUploading(false);
     }
@@ -38,11 +37,10 @@ export default function ImageUpload({
       <label className="block text-sm font-bold mb-1.5">{label}</label>
       <div className="flex items-start gap-3">
         {value ? (
-          <Image
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             src={value}
             alt="Uploaded"
-            width={120}
-            height={90}
             className="w-[120px] h-[90px] object-cover border-2 border-ink"
           />
         ) : (
@@ -68,12 +66,12 @@ export default function ImageUpload({
             onClick={() => fileRef.current?.click()}
             className="bg-marigold text-ink font-bold text-sm px-4 py-2 border-2 border-ink disabled:opacity-60"
           >
-            {uploading ? 'Uploading…' : '⬆ Upload Image'}
+            {uploading ? 'Uploading…' : 'Upload Image'}
           </button>
           <input
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="…ya image URL paste karein"
+            placeholder="…or paste an image URL"
             className="w-full border-2 border-ink/30 px-3 py-2 text-sm focus:outline-none focus:border-ink"
           />
           {value && (
@@ -82,7 +80,7 @@ export default function ImageUpload({
               onClick={() => onChange('')}
               className="text-clay text-sm font-semibold"
             >
-              ✕ Remove image
+              Remove image
             </button>
           )}
           {error && <p className="text-clay text-sm font-semibold">{error}</p>}

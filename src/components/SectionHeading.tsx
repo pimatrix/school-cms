@@ -1,32 +1,46 @@
+import Link from 'next/link';
+
 export default function SectionHeading({
   kicker,
   title,
   linkHref,
   linkLabel,
+  dark = false,
 }: {
   kicker: string;
   title: string;
   linkHref?: string;
   linkLabel?: string;
+  dark?: boolean;
 }) {
   return (
-    <div className="flex items-end justify-between gap-4 mb-8">
+    <div className="flex items-end justify-between gap-4 mb-10">
       <div>
-        <p className="text-pine font-extrabold tracking-[0.22em] text-xs uppercase mb-2">
+        <p
+          className={`flex items-center gap-3 font-bold tracking-[0.24em] text-[11px] sm:text-xs uppercase mb-3 ${
+            dark ? 'text-marigold-light' : 'text-marigold-dark'
+          }`}
+        >
+          <span className={`inline-block h-px w-8 ${dark ? 'bg-marigold-light' : 'bg-marigold'}`} />
           {kicker}
         </p>
-        <h2 className="font-display font-black text-3xl sm:text-4xl text-pine-deep leading-tight">
+        <h2
+          className={`font-display font-black text-3xl sm:text-[40px] leading-[1.1] ${
+            dark ? 'text-paper' : 'text-pine-deep'
+          }`}
+        >
           {title}
         </h2>
-        <div className="mt-3 h-1.5 w-24 bg-marigold" />
       </div>
       {linkHref && linkLabel && (
-        <a
+        <Link
           href={linkHref}
-          className="hidden sm:inline-block shrink-0 font-bold text-sm text-pine link-flourish"
+          className={`hidden sm:inline-block shrink-0 font-bold text-sm link-flourish pb-1 ${
+            dark ? 'text-marigold-light' : 'text-pine'
+          }`}
         >
           {linkLabel} →
-        </a>
+        </Link>
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import PageShell from '@/components/PageShell';
-import { formatDate, getNews, getNotices } from '@/lib/data';
+import { externalHref, formatDate, getNews, getNotices } from '@/lib/data';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,15 +9,18 @@ export default async function NewsPage() {
 
   return (
     <PageShell kicker="Stay Updated" title="News & Notices">
-      <div className="grid lg:grid-cols-12 gap-10">
+      <div className="grid lg:grid-cols-12 gap-12">
         {/* Notices column */}
         <div className="lg:col-span-5">
-          <h2 className="font-display font-bold text-2xl text-pine-deep mb-5">
+          <h2 className="font-display font-bold text-2xl text-pine-deep mb-6">
             📌 Notice Board
           </h2>
-          <ul className="space-y-3">
+          <ul className="space-y-3.5">
             {notices.map((n) => (
-              <li key={n.id} className="bg-paper border-2 border-ink p-4 shadow-card">
+              <li
+                key={n.id}
+                className="rounded-2xl bg-white shadow-card ring-1 ring-ink/5 p-5"
+              >
                 <p className="font-bold leading-snug">
                   {n.is_pinned && <span className="text-clay">📌 </span>}
                   {n.title}
@@ -27,16 +30,16 @@ export default async function NewsPage() {
                     {n.body}
                   </p>
                 )}
-                <p className="text-xs text-ink/55 mt-2">
+                <p className="text-xs text-ink/55 mt-2.5">
                   {formatDate(n.created_at)}
                   {n.link_url && (
                     <>
                       {' • '}
                       <a
-                        href={n.link_url}
+                        href={externalHref(n.link_url)}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-pine font-semibold underline"
+                        className="text-pine font-semibold underline underline-offset-2"
                       >
                         View / Download
                       </a>
@@ -53,14 +56,14 @@ export default async function NewsPage() {
 
         {/* News column */}
         <div className="lg:col-span-7">
-          <h2 className="font-display font-bold text-2xl text-pine-deep mb-5">
+          <h2 className="font-display font-bold text-2xl text-pine-deep mb-6">
             📰 News & Stories
           </h2>
           <div className="space-y-6">
             {news.map((item) => (
               <article
                 key={item.id}
-                className="bg-paper border-2 border-ink shadow-card overflow-hidden sm:flex"
+                className="rounded-2xl bg-white shadow-card ring-1 ring-ink/5 overflow-hidden sm:flex transition-all duration-300 hover:shadow-lift"
               >
                 {item.image_url && (
                   <Image
@@ -68,17 +71,17 @@ export default async function NewsPage() {
                     alt={item.title}
                     width={600}
                     height={450}
-                    className="w-full sm:w-56 h-44 sm:h-auto object-cover shrink-0"
+                    className="w-full sm:w-60 h-48 sm:h-auto object-cover shrink-0"
                   />
                 )}
-                <div className="p-5">
-                  <p className="text-xs font-bold text-pine tracking-wide">
+                <div className="p-6">
+                  <p className="text-[11px] font-bold text-marigold-dark tracking-[0.14em] uppercase">
                     {formatDate(item.publish_date)}
                   </p>
-                  <h3 className="font-display font-bold text-xl mt-1 leading-snug">
+                  <h3 className="font-display font-bold text-[22px] mt-2 leading-snug text-pine-deep">
                     {item.title}
                   </h3>
-                  <p className="text-sm text-ink/70 mt-2 leading-relaxed">
+                  <p className="text-sm text-ink/70 mt-2.5 leading-relaxed">
                     {item.excerpt}
                   </p>
                   {item.body && (

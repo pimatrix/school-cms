@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     } = await supabase.auth.getUser();
     if (!user) {
       return NextResponse.json(
-        { error: 'Login required. Sirf admin upload kar sakta hai.' },
+        { error: 'Login required. Only an administrator can upload images.' },
         { status: 401 }
       );
     }
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     const apiSecret = process.env.CLOUDINARY_API_SECRET;
     if (!cloudName || !apiKey || !apiSecret) {
       return NextResponse.json(
-        { error: 'Cloudinary env variables set nahi hain (Vercel settings check karein).' },
+        { error: 'Cloudinary is not configured. Check the environment variables in the deployment settings.' },
         { status: 503 }
       );
     }
@@ -33,17 +33,17 @@ export async function POST(request: Request) {
     const formData = await request.formData();
     const file = formData.get('file');
     if (!file || typeof file === 'string') {
-      return NextResponse.json({ error: 'Koi file nahi mili.' }, { status: 400 });
+      return NextResponse.json({ error: 'No file was received.' }, { status: 400 });
     }
     if (!file.type.startsWith('image/')) {
       return NextResponse.json(
-        { error: 'Sirf image files upload ho sakti hain.' },
+        { error: 'Only image files can be uploaded.' },
         { status: 400 }
       );
     }
     if (file.size > 10 * 1024 * 1024) {
       return NextResponse.json(
-        { error: 'Image 10 MB se chhoti rakhein.' },
+        { error: 'Please keep the image under 10 MB.' },
         { status: 400 }
       );
     }
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
   } catch (err) {
     console.error('Upload error:', err);
     return NextResponse.json(
-      { error: 'Upload fail ho gaya. Dobara try karein.' },
+      { error: 'Upload failed. Please try again.' },
       { status: 500 }
     );
   }

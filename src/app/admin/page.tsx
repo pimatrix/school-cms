@@ -37,12 +37,11 @@ export default function AdminDashboard() {
   return (
     <div>
       <h1 className="font-display font-black text-3xl sm:text-4xl text-pine-deep">
-        Namaste, Admin 🙏
+        Dashboard
       </h1>
       <p className="text-ink/65 mt-2 max-w-2xl leading-relaxed">
-        Yahan se puri website control hoti hai — jo bhi aap yahan badlenge ya
-        jodenge, wo website par turant live dikhega. Code chhune ki koi
-        zaroorat nahi.
+        The whole website is managed from here. Anything you add or change is
+        published on the live site immediately — no code changes needed.
       </p>
 
       {unread !== null && unread > 0 && (
@@ -50,8 +49,7 @@ export default function AdminDashboard() {
           href="/admin/enquiries"
           className="block mt-5 bg-marigold border-2 border-ink shadow-card px-5 py-3.5 font-bold"
         >
-          ✉️ {unread} nayi enquiry aayi hai jo abhi padhi nahi gayi — dekhne ke
-          liye click karein →
+          ✉️ You have {unread} unread {unread === 1 ? 'enquiry' : 'enquiries'} — click to view →
         </Link>
       )}
 
@@ -75,20 +73,20 @@ export default function AdminDashboard() {
 
       <div className="mt-8 bg-pine-deep text-paper p-6 border-2 border-ink">
         <h2 className="font-display font-bold text-xl text-marigold">
-          Shuruaat kahan se karein?
+          Getting started
         </h2>
         <ol className="list-decimal pl-5 mt-3 space-y-1.5 text-paper/85 text-[15px]">
           <li>
-            <strong>Site Settings</strong> me school ka naam, logo, phone,
-            email aur map check karein.
+            In <strong>Site Settings</strong>, check the school name, logo,
+            phone, email and map.
           </li>
           <li>
-            <strong>Page Content</strong> me About / Academics / Admissions ka
-            text apne hisaab se badlein.
+            In <strong>Page Content</strong>, adjust the About, Academics and
+            Admissions text.
           </li>
           <li>
-            Roz ka kaam: <strong>Notices</strong> jodein, <strong>Gallery</strong>{' '}
-            me photos daalein, <strong>Enquiries</strong> padhein.
+            Day to day: add <strong>Notices</strong>, upload{' '}
+            <strong>Gallery</strong> photos and read <strong>Enquiries</strong>.
           </li>
         </ol>
       </div>

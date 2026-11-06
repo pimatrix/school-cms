@@ -34,85 +34,80 @@ export default function Hero({
   ].filter((s) => s.value);
 
   return (
-    <section className="bg-pine-deep text-paper relative overflow-hidden">
-      <div className="absolute inset-0 texture-dots opacity-60 pointer-events-none" />
-      <div className="max-w-7xl mx-auto px-4 pt-12 pb-10 lg:pt-16 lg:pb-14 grid lg:grid-cols-12 gap-10 items-center relative">
-        <div className="lg:col-span-7 rise-in">
-          <p className="inline-block bg-marigold text-ink font-extrabold text-xs tracking-[0.2em] uppercase px-3 py-1.5 border-2 border-ink">
+    <section className="relative bg-pine-deep text-paper overflow-hidden">
+      {/* Full-bleed photograph with a deep-green gradient wash */}
+      {slide.image_url && (
+        <Image
+          key={slide.id}
+          src={slide.image_url}
+          alt=""
+          fill
+          priority
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+      )}
+      <div className="absolute inset-0 bg-gradient-to-r from-pine-deep/95 via-pine-deep/80 to-pine-deep/30" />
+      <div className="absolute inset-0 bg-gradient-to-t from-pine-deep/90 via-transparent to-pine-deep/20" />
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-14 lg:pt-24 lg:pb-20">
+        <div className="max-w-3xl rise-in">
+          <p className="inline-flex items-center gap-2.5 text-marigold-light font-bold tracking-[0.24em] text-[11px] sm:text-xs uppercase">
+            <span className="inline-block h-px w-9 bg-marigold" />
             {settings.city} • {settings.state}
           </p>
-          <h2 className="font-display font-black text-4xl sm:text-5xl xl:text-[64px] leading-[1.04] mt-5">
+          <h2 className="font-display font-black text-[42px] sm:text-6xl xl:text-[72px] leading-[1.03] mt-5">
             {slide.title}
           </h2>
-          <p className="mt-5 text-paper/80 text-base sm:text-lg leading-relaxed max-w-xl">
+          <p className="mt-6 text-paper/85 text-base sm:text-lg leading-relaxed max-w-xl">
             {slide.subtitle}
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-9 flex flex-wrap gap-3">
             {slide.cta_text && slide.cta_link && (
               <Link
                 href={slide.cta_link}
-                className="bg-marigold text-ink font-bold px-6 py-3 border-2 border-ink shadow-card hover:-translate-y-0.5 transition-transform"
+                className="rounded-full bg-marigold hover:bg-marigold-light text-ink font-bold px-7 py-3.5 shadow-lift transition-all hover:-translate-y-0.5"
               >
                 {slide.cta_text} →
               </Link>
             )}
             <Link
               href="/news"
-              className="bg-transparent text-paper font-bold px-6 py-3 border-2 border-paper/60 hover:border-paper hover:bg-paper/10 transition-colors"
+              className="rounded-full border border-paper/50 text-paper font-bold px-7 py-3.5 hover:border-paper hover:bg-paper/10 transition-colors"
             >
               Latest Notices
             </Link>
           </div>
 
           {slides.length > 1 && (
-            <div className="flex gap-2 mt-10">
+            <div className="flex gap-2 mt-12">
               {slides.map((s, i) => (
                 <button
                   key={s.id}
                   onClick={() => setIndex(i)}
                   aria-label={`Slide ${i + 1}`}
-                  className={`h-2 transition-all ${
-                    i === index ? 'w-10 bg-marigold' : 'w-4 bg-paper/40'
+                  className={`h-[3px] rounded-full transition-all ${
+                    i === index ? 'w-11 bg-marigold' : 'w-5 bg-paper/40 hover:bg-paper/70'
                   }`}
                 />
               ))}
             </div>
           )}
         </div>
-
-        <div className="lg:col-span-5 relative">
-          <div className="absolute -inset-2 border-2 border-marigold translate-x-4 translate-y-4 pointer-events-none" />
-          {slide.image_url ? (
-            <Image
-              src={slide.image_url}
-              alt={slide.title}
-              width={900}
-              height={700}
-              className="relative w-full h-72 sm:h-96 object-cover border-2 border-ink"
-              priority
-            />
-          ) : (
-            <div className="relative w-full h-72 sm:h-96 bg-pine flex items-center justify-center border-2 border-ink">
-              <span className="font-display font-black text-6xl text-paper/30">
-                BVM
-              </span>
-            </div>
-          )}
-        </div>
       </div>
 
-      {stats.length > 0 && (
-        <div className="relative border-t border-paper/15">
-          <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 lg:grid-cols-4">
+      {stats.length >= 2 && (
+        <div className="relative border-t border-paper/15 bg-pine-deep/60 backdrop-blur-sm">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 lg:grid-cols-4">
             {stats.map((s, i) => (
               <div
                 key={s.label}
-                className={`py-5 pr-4 ${i > 0 ? 'border-l border-paper/15 pl-4' : ''}`}
+                className={`py-6 pr-4 ${i > 0 ? 'border-l border-paper/12 pl-5' : ''}`}
               >
-                <p className="font-display font-black text-2xl sm:text-3xl text-marigold">
+                <p className="font-display font-black text-[26px] sm:text-[34px] leading-none text-marigold-light">
                   {s.value}
                 </p>
-                <p className="text-paper/70 text-xs sm:text-sm font-semibold tracking-wide uppercase mt-1">
+                <p className="text-paper/65 text-[11px] sm:text-xs font-semibold tracking-[0.16em] uppercase mt-2">
                   {s.label}
                 </p>
               </div>

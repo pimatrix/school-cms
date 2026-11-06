@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
 
 const PAGES = [
-  { slug: 'about', label: 'ℹ️ About Page' },
-  { slug: 'academics', label: '📚 Academics Page' },
-  { slug: 'admissions', label: '📝 Admissions Page' },
+  { slug: 'about', label: 'About Page' },
+  { slug: 'academics', label: 'Academics Page' },
+  { slug: 'admissions', label: 'Admissions Page' },
 ];
 
 const inputCls =
@@ -44,7 +44,7 @@ export default function AdminPagesPage() {
       .from('page_content')
       .upsert({ slug, title, body });
     setSaving(false);
-    setMsg(error ? `⚠ Save nahi hua: ${error.message}` : '✅ Page saved!');
+    setMsg(error ? `Could not save: ${error.message}` : 'Page saved.');
   }
 
   return (
@@ -53,9 +53,10 @@ export default function AdminPagesPage() {
         Page Content
       </h1>
       <p className="text-ink/65 mt-1 mb-6">
-        About, Academics aur Admissions pages ka text. Simple HTML chal sakta
-        hai — <code>&lt;p&gt;</code> paragraph, <code>&lt;ul&gt;&lt;li&gt;</code>{' '}
-        list, <code>&lt;strong&gt;</code> bold ke liye.
+        Text for the About, Academics and Admissions pages. Basic HTML is
+        supported — <code>&lt;p&gt;</code> for paragraphs,{' '}
+        <code>&lt;ul&gt;&lt;li&gt;</code> for lists, <code>&lt;strong&gt;</code>{' '}
+        for bold.
       </p>
 
       <div className="flex flex-wrap gap-2 mb-6">
@@ -106,7 +107,7 @@ export default function AdminPagesPage() {
               disabled={saving}
               className="bg-pine text-paper font-bold px-6 py-2.5 border-2 border-ink disabled:opacity-60"
             >
-              {saving ? 'Saving…' : '💾 Save Page'}
+              {saving ? 'Saving…' : 'Save Page'}
             </button>
             {msg && <p className="font-semibold text-sm">{msg}</p>}
           </div>

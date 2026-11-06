@@ -172,12 +172,67 @@ export async function getFacilities(): Promise<Facility[]> {
   }
 }
 
-export function mapEmbedSrc(settings: SiteSettings): string {
-  if (settings.map_embed_url) return settings.map_embed_url;
-  const q = encodeURIComponent(
-    settings.map_query || `${settings.school_name} ${settings.city}`
+// The search text used for the map: the admin's map_query if set, otherwise
+// the school's name + address + city from settings.
+export function mapQuery(settings: SiteSettings): string {
+  const q = (settings.map_query || '').trim();
+  if (q) return q;
+  return [settings.school_name, settings.address, settings.city]
+    .filter(Boolean)
+    .join(', ');
+}
+
+// A URL is directly iframe-embeddable only if it is a real Google Maps embed
+// URL. A normal share/place link pasted by an admin is NOT embeddable (Google
+// refuses to frame it), so for those we extract the place and rebuild.
+function isEmbeddableMapUrl(url: string): boolean {
+  return (
+    url.includes('output=embed') ||
+    url.includes('/maps/embed') ||
+    url.includes('google.com/maps/embed') ||
+    url.includes('embed?pb=')
   );
+}
+
+function queryFromMapUrl(url: string): string {
+  try {
+    const u = new URL(url);
+    const q = u.searchParams.get('q') || u.searchParams.get('query');
+    if (q) return q;
+    const place = u.pathname.match(/\/place\/([^/@]+)/);
+    if (place) return decodeURIComponent(place[1].replace(/\+/g, ' '));
+  } catch {
+    // not a parseable URL — ignore
+  }
+  return '';
+}
+
+// ALWAYS returns a working Google Maps embed URL:
+//  1. a genuine embed URL saved by the admin wins;
+//  2. otherwise the query-based embed is built from map_query / address.
+export function mapEmbedSrc(settings: SiteSettings): string {
+  const embed = (settings.map_embed_url || '').trim();
+  if (embed && isEmbeddableMapUrl(embed)) return embed;
+  const fromUrl = embed ? queryFromMapUrl(embed) : '';
+  const q = encodeURIComponent(fromUrl || mapQuery(settings));
   return `https://www.google.com/maps?q=${q}&output=embed`;
+}
+
+// "Open in Google Maps" link (full Google Maps search for the same place).
+export function mapSearchUrl(settings: SiteSettings): string {
+  const q = encodeURIComponent(mapQuery(settings));
+  return `https://www.google.com/maps/search/?api=1&query=${q}`;
+}
+
+// Admin-entered external links (notice attachments, social profiles) are
+// often typed without a protocol — normalise so the link actually works.
+export function externalHref(url: string): string {
+  const u = (url || '').trim();
+  if (!u) return u;
+  if (/^(https?:)?\/\//i.test(u) || u.startsWith('/') || u.startsWith('#')) {
+    return u;
+  }
+  return `https://${u}`;
 }
 
 export function formatDate(iso: string): string {

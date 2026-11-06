@@ -6,17 +6,17 @@ import { useEffect, useState } from 'react';
 import { getBrowserClient } from '@/lib/supabase/browser';
 
 const MENU = [
-  { href: '/admin', label: '🏠 Dashboard' },
-  { href: '/admin/settings', label: '⚙️ Site Settings' },
-  { href: '/admin/hero', label: '🖼️ Hero Slides' },
-  { href: '/admin/notices', label: '📌 Notices' },
-  { href: '/admin/news', label: '📰 News' },
-  { href: '/admin/events', label: '📅 Events' },
-  { href: '/admin/gallery', label: '📷 Gallery' },
-  { href: '/admin/teachers', label: '👩‍🏫 Teachers' },
-  { href: '/admin/facilities', label: '🏫 Facilities' },
-  { href: '/admin/pages', label: '📄 Page Content' },
-  { href: '/admin/enquiries', label: '✉️ Enquiries' },
+  { href: '/admin', label: 'Dashboard' },
+  { href: '/admin/settings', label: 'Site Settings' },
+  { href: '/admin/hero', label: 'Hero Slides' },
+  { href: '/admin/notices', label: 'Notices' },
+  { href: '/admin/news', label: 'News' },
+  { href: '/admin/events', label: 'Events' },
+  { href: '/admin/gallery', label: 'Gallery' },
+  { href: '/admin/teachers', label: 'Teachers' },
+  { href: '/admin/facilities', label: 'Facilities' },
+  { href: '/admin/pages', label: 'Page Content' },
+  { href: '/admin/enquiries', label: 'Enquiries' },
 ];
 
 export default function AdminLayout({
@@ -89,13 +89,13 @@ export default function AdminLayout({
               href="/"
               className="block px-3 py-2 text-[15px] font-semibold text-paper/85 hover:bg-paper/10"
             >
-              🌐 View Website
+              View Website
             </Link>
             <button
               onClick={signOut}
               className="block w-full text-left px-3 py-2 text-[15px] font-semibold text-marigold hover:bg-paper/10"
             >
-              🚪 Sign Out
+              Sign Out
             </button>
           </div>
         </nav>

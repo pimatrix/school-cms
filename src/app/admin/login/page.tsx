@@ -19,7 +19,7 @@ export default function AdminLoginPage() {
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
-      setError('Login fail: email ya password galat hai. Dobara check karein.');
+      setError('Login failed: the email or password is incorrect. Please try again.');
       return;
     }
     router.push('/admin');
@@ -39,11 +39,10 @@ export default function AdminLoginPage() {
           Secure Area
         </p>
         <h1 className="font-display font-black text-3xl text-pine-deep mt-2">
-          Admin Login 🔐
+          Admin Login
         </h1>
         <p className="text-ink/65 text-sm mt-2">
-          Sirf authorised school admin ke liye. Galat login database tak nahi
-          pahuncha sakta — saari security Supabase RLS se hoti hai.
+          For authorised school administrators only.
         </p>
 
         <div className="mt-6 space-y-4">

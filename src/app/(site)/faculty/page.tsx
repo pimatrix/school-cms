@@ -12,7 +12,7 @@ export default async function FacultyPage() {
         {teachers.map((t) => (
           <div
             key={t.id}
-            className="bg-paper border-2 border-ink shadow-card p-5 text-center"
+            className="rounded-2xl bg-white shadow-card ring-1 ring-ink/5 p-6 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
           >
             {t.photo_url ? (
               <Image
@@ -20,20 +20,20 @@ export default async function FacultyPage() {
                 alt={t.name}
                 width={240}
                 height={240}
-                className="w-24 h-24 rounded-full object-cover mx-auto border-2 border-pine"
+                className="w-24 h-24 rounded-full object-cover mx-auto ring-2 ring-pine/25"
               />
             ) : (
-              <div className="w-24 h-24 rounded-full bg-pine text-paper font-display font-black text-3xl flex items-center justify-center mx-auto border-2 border-ink">
+              <div className="w-24 h-24 rounded-full bg-pine text-paper font-display font-black text-3xl flex items-center justify-center mx-auto">
                 {t.name.split(' ').map((w) => w[0]).slice(0, 2).join('')}
               </div>
             )}
-            <h3 className="font-display font-bold text-lg mt-3 leading-snug">
+            <h3 className="font-display font-bold text-lg mt-4 leading-snug text-pine-deep">
               {t.name}
             </h3>
-            <p className="text-pine font-semibold text-sm">{t.role}</p>
+            <p className="text-pine font-semibold text-sm mt-0.5">{t.role}</p>
             {t.subject && <p className="text-ink/70 text-sm mt-0.5">{t.subject}</p>}
             {t.qualification && (
-              <p className="text-ink/55 text-xs mt-1">{t.qualification}</p>
+              <p className="text-ink/50 text-xs mt-1.5">{t.qualification}</p>
             )}
           </div>
         ))}

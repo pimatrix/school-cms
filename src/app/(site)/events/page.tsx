@@ -13,7 +13,7 @@ export default async function EventsPage() {
   const renderEvent = (ev: (typeof events)[number]) => (
     <article
       key={ev.id}
-      className="bg-paper border-2 border-ink shadow-card overflow-hidden"
+      className="rounded-2xl bg-white shadow-card ring-1 ring-ink/5 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lift"
     >
       {ev.image_url && (
         <Image
@@ -24,20 +24,20 @@ export default async function EventsPage() {
           className="w-full h-44 object-cover"
         />
       )}
-      <div className="p-5 flex gap-4">
-        <div className="shrink-0 w-14 h-14 bg-pine text-paper flex flex-col items-center justify-center border-2 border-ink">
-          <span className="font-display font-black text-xl leading-none">
+      <div className="p-6 flex gap-5">
+        <div className="shrink-0 w-16 h-16 rounded-2xl bg-pine text-paper flex flex-col items-center justify-center">
+          <span className="font-display font-black text-2xl leading-none">
             {new Date(ev.event_date).getDate()}
           </span>
-          <span className="text-[10px] font-bold tracking-widest">
+          <span className="text-[10px] font-bold tracking-[0.18em] mt-1">
             {new Date(ev.event_date)
               .toLocaleDateString('en-IN', { month: 'short' })
               .toUpperCase()}
           </span>
         </div>
-        <div>
-          <h3 className="font-display font-bold text-lg leading-snug">{ev.title}</h3>
-          <p className="text-xs font-semibold text-pine mt-0.5">
+        <div className="min-w-0">
+          <h3 className="font-display font-bold text-lg leading-snug text-pine-deep">{ev.title}</h3>
+          <p className="text-xs font-semibold text-pine mt-1">
             {formatDate(ev.event_date)}
             {ev.location ? ` • 📍 ${ev.location}` : ''}
           </p>
@@ -51,7 +51,7 @@ export default async function EventsPage() {
 
   return (
     <PageShell kicker="Calendar" title="Events">
-      <h2 className="font-display font-bold text-2xl text-pine-deep mb-5">
+      <h2 className="font-display font-bold text-2xl text-pine-deep mb-6">
         Upcoming Events
       </h2>
       {upcoming.length > 0 ? (
@@ -65,10 +65,10 @@ export default async function EventsPage() {
 
       {past.length > 0 && (
         <>
-          <h2 className="font-display font-bold text-2xl text-pine-deep mt-12 mb-5">
+          <h2 className="font-display font-bold text-2xl text-pine-deep mt-14 mb-6">
             Past Events
           </h2>
-          <div className="grid md:grid-cols-2 gap-5 opacity-80">
+          <div className="grid md:grid-cols-2 gap-5 opacity-75">
             {past.map(renderEvent)}
           </div>
         </>

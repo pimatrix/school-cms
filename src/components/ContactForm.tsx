@@ -27,18 +27,18 @@ export default function ContactForm() {
   }
 
   const inputCls =
-    'w-full border-2 border-ink bg-paper px-3.5 py-2.5 text-[15px] focus:outline-none focus:ring-2 focus:ring-marigold';
+    'w-full rounded-xl border border-ink/15 bg-white px-4 py-3 text-[15px] shadow-soft focus:outline-none focus:ring-2 focus:ring-marigold/70 focus:border-marigold transition';
 
   if (status === 'sent') {
     return (
-      <div className="bg-pine text-paper border-2 border-ink shadow-card p-6">
-        <p className="font-display font-bold text-xl">✅ Dhanyavaad! Message received.</p>
+      <div className="rounded-2xl bg-pine text-paper shadow-card p-7">
+        <p className="font-display font-bold text-[22px]">Thank you — your message has been received.</p>
         <p className="text-paper/80 mt-2 text-sm leading-relaxed">
           Your enquiry has been saved. The school office will contact you soon.
         </p>
         <button
           onClick={() => setStatus('idle')}
-          className="mt-4 bg-marigold text-ink font-bold px-4 py-2 border-2 border-ink"
+          className="mt-5 rounded-full bg-marigold text-ink font-bold px-5 py-2.5 hover:bg-marigold-light transition-colors"
         >
           Send another message
         </button>
@@ -49,7 +49,7 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-paper border-2 border-ink shadow-card p-6 space-y-4"
+      className="rounded-2xl bg-white shadow-card ring-1 ring-ink/5 p-6 sm:p-7 space-y-4"
     >
       <div className="grid sm:grid-cols-2 gap-4">
         <div>
@@ -91,19 +91,19 @@ export default function ContactForm() {
           value={form.message}
           onChange={(e) => setForm({ ...form, message: e.target.value })}
           className={inputCls}
-          placeholder="Admission, transfer, certificate… kya jankari chahiye?"
+          placeholder="Admissions, transfer, certificates — what would you like to know?"
         />
       </div>
       {status === 'error' && (
         <p className="text-clay font-semibold text-sm">
-          ⚠ Message save nahi ho paya. Please try again, ya school office ko
-          phone karein.
+          ⚠ Your message could not be saved. Please try again, or contact the
+          school office directly.
         </p>
       )}
       <button
         type="submit"
         disabled={status === 'sending'}
-        className="bg-pine text-paper font-bold px-6 py-3 border-2 border-ink shadow-card hover:-translate-y-0.5 transition-transform disabled:opacity-60"
+        className="rounded-full bg-pine text-paper font-bold px-7 py-3 shadow-soft hover:bg-pine-dark transition-all hover:-translate-y-0.5 disabled:opacity-60 disabled:hover:translate-y-0"
       >
         {status === 'sending' ? 'Sending…' : 'Send Enquiry →'}
       </button>

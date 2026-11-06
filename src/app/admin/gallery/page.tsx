@@ -7,13 +7,13 @@ export default function AdminGalleryPage() {
     <EntityManager
       table="gallery_images"
       title="Gallery"
-      description="School ki photos. Category wise group hokar website par dikhti hain (jaise Campus, Sports, Events)."
+      description="School photos, shown on the website grouped by category (for example Campus, Sports, Events)."
       orderBy="sort_order"
       defaults={{ category: 'Campus', sort_order: 0 }}
       fields={[
-        { key: 'caption', label: 'Caption (photo ke neeche text)', type: 'text' },
+        { key: 'caption', label: 'Caption', type: 'text' },
         { key: 'category', label: 'Category', type: 'text', placeholder: 'Campus / Sports / Events / Academics' },
-        { key: 'sort_order', label: 'Order (chhota pehle)', type: 'number' },
+        { key: 'sort_order', label: 'Order (lower first)', type: 'number' },
         { key: 'image_url', label: 'Photo', type: 'image' },
       ]}
       listLabel={(r) => String(r.caption || 'Photo')}

@@ -14,16 +14,16 @@ export default async function AdmissionsPage() {
           dangerouslySetInnerHTML={{ __html: page.body }}
         />
         <aside className="lg:col-span-4">
-          <div className="bg-marigold border-2 border-ink shadow-card p-6">
-            <h2 className="font-display font-black text-xl">Have a question?</h2>
-            <p className="text-sm mt-2 leading-relaxed">
+          <div className="rounded-2xl bg-marigold p-7 shadow-card lg:sticky lg:top-40">
+            <h2 className="font-display font-black text-[22px] text-ink">Have a question?</h2>
+            <p className="text-sm mt-2.5 leading-relaxed text-ink/85">
               Send an enquiry and the school office will get back to you. For
               urgent admission queries, please visit the school office during
               working hours.
             </p>
             <Link
               href="/contact"
-              className="inline-block mt-4 bg-ink text-paper font-bold px-5 py-2.5 hover:bg-pine-deep transition-colors"
+              className="inline-block mt-5 rounded-full bg-ink text-paper font-bold px-6 py-3 hover:bg-pine-deep transition-all hover:-translate-y-0.5"
             >
               Contact the Office →
             </Link>
