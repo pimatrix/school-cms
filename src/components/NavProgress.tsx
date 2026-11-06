@@ -16,6 +16,7 @@ export default function NavProgress() {
   const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
   const interval = useRef<ReturnType<typeof setInterval> | null>(null);
   const firstRender = useRef(true);
+  const startedAt = useRef(0);
 
   function clearTimers() {
     timers.current.forEach(clearTimeout);
@@ -28,6 +29,7 @@ export default function NavProgress() {
 
   function start() {
     clearTimers();
+    startedAt.current = Date.now();
     setVisible(true);
     setProgress(10);
     document.body.classList.add('page-loading');
@@ -45,13 +47,22 @@ export default function NavProgress() {
 
   function finish() {
     clearTimers();
-    setProgress(100);
-    document.body.classList.remove('page-loading');
+    // Minimum visible time: with loading.tsx the new route (and its
+    // pathname change) commits almost instantly, so without this floor
+    // the bar flashes and is gone before anyone can see it.
+    const elapsed = Date.now() - startedAt.current;
+    const wait = Math.max(0, 900 - elapsed);
     timers.current.push(
       setTimeout(() => {
-        setVisible(false);
-        setProgress(0);
-      }, 350)
+        setProgress(100);
+        document.body.classList.remove('page-loading');
+        timers.current.push(
+          setTimeout(() => {
+            setVisible(false);
+            setProgress(0);
+          }, 300)
+        );
+      }, wait)
     );
   }
 
