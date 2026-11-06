@@ -96,10 +96,7 @@ export default function Header({
     <header className="sticky top-0 z-40">
       {/* Utility strip */}
       <div className="bg-navy-950 text-white/85 text-xs sm:text-[13px]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap gap-x-5 gap-y-0.5 items-center justify-between">
-          <p className="font-medium tracking-wide">
-            {settings.affiliation || 'School Education Department, Govt. of Madhya Pradesh'}
-          </p>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex flex-wrap gap-x-5 gap-y-0.5 items-center justify-end">
           <div className="flex items-center gap-4">
             {settings.phone && (
               <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="inline-flex items-center gap-1.5 hover:text-saffron-light transition-colors">
