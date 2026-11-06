@@ -64,9 +64,6 @@ export default function Hero({
               {pick(lang, slide.title, slide.title_hi)}
             </span>
           </h1>
-          <p className="mt-6 text-white/85 text-base sm:text-lg leading-relaxed max-w-xl">
-            {pick(lang, slide.subtitle, slide.subtitle_hi)}
-          </p>
           <div className="mt-9 flex flex-wrap gap-3">
             {slide.cta_text && slide.cta_link && (
               <Link
